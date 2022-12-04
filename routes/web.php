@@ -36,6 +36,8 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::post('/addstudentPost',[AdminController::class,'student_post'])->name('add_student.post');
   Route::get('/student/show',[AdminController::class,'student_show'])->name('add_student.show');
   Route::get('/student/delete/{id}',[AdminController::class,'student_delete'])->name('student.delete');
+  Route::post('/import/student',[AdminController::class,'import_student'])->name('student.import');
+  Route::get('/export/student',[AdminController::class,'sample_export'])->name('student.export');
   //Course Part
   Route::get('/Addcourse',[CourseController::class,'index'])->name('course.index');
   Route::post('/Addcourse/post',[CourseController::class,'StoreCourse'])->name('course.post');

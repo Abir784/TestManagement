@@ -5,8 +5,10 @@
     <div class="row">
         <div class="col-lg-14">
             <div class="card">
-                <div class="card-header"><h3>Student List</h3></div>
                 <div class="card-body">
+                    <div class="card-title">
+                        <h3>Student List</h3><br>
+                    </div>
 
                     <table class="table table-striped">
                         <tr>

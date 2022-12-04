@@ -83,16 +83,25 @@
                             <div class="row form-group">
                                 <div class="m-3 form-group">
                                     <label for="" class="form-label">Start Date:</label>
-                                    <input type="datetime-local" required name="start_date" class="form-control form-control-rounded">
+                                    <input type="date" required name="start_date" class="form-control form-control-rounded">
+                                </div>
+
+                                <div class="m-3 form-group">
+                                    <label for="" class="form-label">Start time:</label>
+                                    <input type="time" required name="start_time" class="form-control form-control-rounded">
                                 </div>
 
                                 <div class="m-3 form-group">
                                     <label for="" class="form-label">End Date:</label>
-                                    <input type="datetime-local" required name="end_date" class="form-control form-control-rounded">
+                                    <input type="date" required name="end_date" class="form-control form-control-rounded">
                                 </div>
 
+                                <div class="m-3 form-group">
+                                    <label for="" class="form-label">End time:</label>
+                                    <input type="time" required name="end_time" class="form-control form-control-rounded">
+                                </div>
                             </div>
-             
+
                             <div class="m-3 form-group">
                                 <label for="" class="form-label">Pass Marks:</label>
                                 <input type="number" required name="pass_marks" class="form-control form-control-rounded">

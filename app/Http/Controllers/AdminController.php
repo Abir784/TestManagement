@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\StudentImport;
 use App\Models\Student;
 use App\Models\Country;
 use App\Models\Course;
@@ -9,7 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\User;
 use GrahamCampbell\ResultType\Success;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\StudentSampleExport;
 class AdminController extends Controller
 {
     function student_index(){
@@ -72,5 +74,28 @@ class AdminController extends Controller
         Student::where('user_id',$id)->delete();
         User::where('id',$id)->delete();
         return back()->with('success','Student Deleted Succesfully');
+    }
+    function import_student(Request $request){
+        $request->validate([
+
+            'course_id'=>'required',
+            'batch_id'=>'required',
+            'student_file'=>'required|mimes:csv',
+
+        ],[
+            'course_id.required'=>'Course need to be selected',
+            'batch_id.required'=>'Batch need to be selected',
+            'student_file.required'=>'Upload csv file',
+        ]
+    );
+
+
+        Excel::import(new StudentImport($request->course_id,$request->batch_id), $request->file('student_file'));
+
+        return back()->with('success',"Done");
+
+    }
+    function sample_export(){
+        return Excel::download(new StudentSampleExport, 'sample.xlsx');
     }
 }

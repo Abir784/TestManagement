@@ -55,7 +55,7 @@
                               <div class="mb-3 form-group">
                                 <input type="hidden" name="quiz_id" value="{{$id}}">
                                 <label for="" class="form-lable">Select Question Subject </label>
-                                <select name="subject_id" required class="form-control form-control-rounded" id="subjectid">
+                                <select name="subject_id" required class="form-control form-control-rounded" id="subjectid2">
                                     <option value="">--select subject--</option>
                                     @foreach ($subjects as $subject )
                                     <option value="{{$subject->id}}">{{$subject->name}}</option>
@@ -65,7 +65,7 @@
 
                             <div class="mb-3 form-group">
                                 <label for="" class="form-lable">Select Module </label>
-                                <select name="module_id" required  class="form-control form-control-rounded" id="module_id">
+                                <select name="module_id" required  class="form-control form-control-rounded" id="module_id2">
                                     <option value="">--Select module--</option>
                                 </select>
                             </div>
@@ -113,6 +113,25 @@
 })
 </script>
 
+<script>
+    $('#subjectid2').change(function(){
+        var subject_id = $(this).val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+     $.ajax({
+        type:'POST',
+        url:'/getModule',
+        data:{'subject_id':subject_id},
+        success:function(data){
+            $('#module_id2').html(data);
+        }
+    });
+})
+</script>
 @if (session('success'))
 
 <script>
