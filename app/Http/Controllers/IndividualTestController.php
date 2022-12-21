@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IndividualTest;
+use App\Models\IndividualTestDescriptiveAnswer;
 use App\Models\IndividualTestQuestion;
 use App\Models\IndividualTestStudents;
 use App\Models\InvidualTestResult;
@@ -152,17 +153,10 @@ class IndividualTestController extends Controller
               'time'=>$quiz->time,
           ]);
         }
-
-        function ExamTimeout($id){
-            $student=Student::where('user_id',Auth::id())->first();
-            InvidualTestResult::create([
-                'student_id'=>$student->id,
-                'quiz_id'=>$id,
-                'total_marks'=>0,
-                'created_at'=>Carbon::now(),
-
+        function DescriptiveMarkingIndex(){
+            $submissions=IndividualTestDescriptiveAnswer::all();
+            return view('individual_test.descriptive_index',[
+                'submissions'=>$submissions,
             ]);
-
-            return redirect('/')->with('timeout',"Sorry, you couldn't Submit on time <br> thats why you have got 0 marks. ");
         }
 }

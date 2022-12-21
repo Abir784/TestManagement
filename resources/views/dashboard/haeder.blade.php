@@ -621,10 +621,9 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item active" href="{{route('quiz.index')}}">Independent Descriptive Answers</a>
                                     <a class="dropdown-item active" href="{{route('course_based_test.index')}}">Course Based Descriptive Answers</a>
-                                    <a class="dropdown-item active" href="{{route('individual_test.index')}}">Individual Descriptive Answers</a>
+                                    <a class="dropdown-item active" href="{{ url('admin/Individual/DescriptiveAnswerMarking/Index')}}">Individual Descriptive Answers</a>
 
                             </li>
-
 
                             @endif
 
