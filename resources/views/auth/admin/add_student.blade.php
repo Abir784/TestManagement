@@ -199,7 +199,7 @@
 
      $.ajax({
         type:'POST',
-        url:'/getBatch',
+        url:'/getBatch2',
         data:{'course_id':course_id},
         success:function(data){
             $('#batch_id2').html(data);

@@ -8,7 +8,7 @@
                     <h5 class="card-title">Add Questions(Specific)</h5>
                     <p class="card-text">
 
-                        <form action="{{route('independent.specific.quiz.question.post')}}" method="POST" enctype="multipart/form-data" >
+                        <form action="{{route('individual.specific.quiz.question.post')}}" method="POST" enctype="multipart/form-data" >
                           @csrf
                           <div class="mb-3 form-group">
                             <input type="hidden" name="quiz_id" value="{{$id}}">
@@ -50,7 +50,7 @@
                         <h5 class="card-title">Add Questions(Random)</h5>
                         <p class="card-text">
 
-                            <form action="{{url('IndependentQuizQuestionPost')}}" method="POST" enctype="multipart/form-data" >
+                            <form action="{{route('individual.quiz.question.post')}}" method="POST" enctype="multipart/form-data" >
                               @csrf
                               <div class="mb-3 form-group">
                                 <input type="hidden" name="quiz_id" value="{{$id}}">
@@ -62,6 +62,7 @@
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="mb-3 form-group">
                                 <label for="" class="form-lable">Select Module </label>
                                 <select name="module_id" required  class="form-control form-control-rounded" id="module_id2">

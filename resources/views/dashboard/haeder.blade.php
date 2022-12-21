@@ -564,6 +564,7 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Quizes</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{route('student.quiz.index')}}">Take Quiz</a>
+                                    <a class="dropdown-item" href="{{route('student.assignment.index')}}">Assignments</a>
                                     {{-- <a class="dropdown-item" href="fluid-student-series.html">Series</a>
                                     <a class="dropdown-item" href="fluid-student-courses.html">Courses</a>
                                     <a class="dropdown-item" href="fluid-student-course.html">Course Lessons</a>
@@ -610,6 +611,17 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Quiz</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item active" href="{{route('quiz.index')}}">Create Independent Quiz</a>
+                                    <a class="dropdown-item active" href="{{route('course_based_test.index')}}">Create Course Based Quiz</a>
+                                    <a class="dropdown-item active" href="{{route('assignment.index')}}">Create Assignment</a>
+                                    <a class="dropdown-item active" href="{{route('individual_test.index')}}">Create Individual Quiz</a>
+
+                            </li>
+                            <li class="nav-item dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Submissions</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item active" href="{{route('quiz.index')}}">Independent Descriptive Answers</a>
+                                    <a class="dropdown-item active" href="{{route('course_based_test.index')}}">Course Based Descriptive Answers</a>
+                                    <a class="dropdown-item active" href="{{route('individual_test.index')}}">Individual Descriptive Answers</a>
 
                             </li>
 

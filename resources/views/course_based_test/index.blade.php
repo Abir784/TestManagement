@@ -12,20 +12,22 @@
                         <tr>
                             <th>#</th>
                             <th>Quiz Name</th>
+                            <th>Course Name</th>
+                            <th>Batch Name</th>
                             <th>Pass Marks</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse (App\Models\IndependentTest::all() as $key=>$test)
+                        @forelse (App\Models\CourseBasedTest::all() as $key=>$test)
                         <tr>
                             <td>{{$key+1 }}</td>
                             <td>{{ $test->name}}</td>
+                            <td>{{ $test->rel_to_course->name}}</td>
+                            <td>{{ $test->rel_to_batch->batch_name}}</td>
                             <td>{{ $test->pass_marks}}</td>
-                            <td> <a href="{{route('quiz.statuschange',$test->id)}}" class="btn btn-success">{{($test->status!=0)?'Active':'Not Active'}}</a></td>
-                            <td><a href="{{route('quiz.indipendent.question.index',$test->id)}}" class="btn btn-primary mb-2"> Add Questions</a>
-                                <a href="{{route('quiz.indipendent.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show Questions</a>
+                            <td><a href="{{route('quiz.course_based.question.index',$test->id)}}" class="btn btn-primary mb-2"> Add Questions</a>
+                                <a href="{{route('quiz.course_based.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show Questions</a>
                             </td>
 
 
@@ -46,15 +48,32 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header bg-default">
-                    <h3 id="q_title">{{'Create Independent Test'}}
+                    <h3 id="q_title">{{'Create Course Based Test'}}
                     </h3>
                 </div>
                 <div class="card-body">
-                        <form action="{{route('quiz.post')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('course_based_quiz.post')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Test Title:</label>
                                 <input type="text" required name="name" class="form-control form-control-rounded">
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="" class="form-label">Course Name:</label>
+                                <select name="course_id" id="course_id" class="form-control form-control-rounded" id="">
+                                    <option value="">---Select Course Name---</option>
+                                    @foreach ($course as $course )
+                                    <option value="{{$course->id}}">{{$course->name}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                            <div class="mb-3 form-group">
+                                <label for="" class="form-label">Batch Name:</label>
+                                <select name="batch_id" id="batch_id" class="form-control form-control-rounded" id="">
+                                    <option value="">---Select Batch Name---</option>
+
+                                </select>
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Introduction Text:</label>
@@ -62,7 +81,7 @@
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Passing Comment:</label>
-                                <input type="text" required name="pass_comment" class="form-control form-control-rounded">
+                                <input type="text" required name="passing_comment" class="form-control form-control-rounded">
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Fail Comment:</label>
@@ -71,18 +90,6 @@
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Time:</label>
                                 <input type="integer" required name="time" class="form-control form-control-rounded">
-                            </div>
-                            <div class="mb-3 form-group">
-                                <label for="" class="form-label">Show Scores:</label>
-                                <select name="show_scores" id="" class="form-control form-control-rounded">
-                                    <option value="">--Select--</option>
-                                    <option value="1">
-                                        YES
-                                    </option>
-                                    <option value="0">
-                                        NO
-                                    </option>
-                                </select>
                             </div>
                             <div class="row form-group">
                                 <div class="m-3 form-group">
@@ -125,14 +132,24 @@
 @section('js_code')
 
 <script>
+    $('#course_id').change(function(){
+        var course_id = $(this).val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-ClassicEditor
-        .create( document.querySelector( '#editor' ) )
-        .catch( error => {
-            console.error( error );
-        } );
-
- </script>
+     $.ajax({
+        type:'POST',
+        url:'/getBatch',
+        data:{'course_id':course_id},
+        success:function(data){
+            $('#batch_id').html(data);
+        }
+    });
+})
+</script>
 
 
 @if (session('success'))

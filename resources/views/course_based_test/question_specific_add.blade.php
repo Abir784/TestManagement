@@ -9,7 +9,7 @@
                     <p class="card-text">
 
 
-                        <a href="{{route('quiz.indipendent.question.index',$quiz_id)}}" class="btn btn-primary">Back</a>
+                        <a href="{{route('quiz.course_based.question.index',$quiz_id)}}" class="btn btn-primary">Back</a>
 
 
                     </p>
@@ -20,7 +20,7 @@
                                 <th>Question Title</th>
                             </tr>
                         </thead>
-                        <form action="{{route('independent.add.quiz.question.post')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('course_based.add.quiz.question.post')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="quiz_id" value="{{$quiz_id}}">
                             <tbody>

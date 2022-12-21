@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('batches', function (Blueprint $table) {
+        Schema::create('invidual_test_results', function (Blueprint $table) {
             $table->id();
-            $table->string('batch_name');
-            $table->integer('course_id');
-            $table->timestamp('start_date')->nullable();
+            $table->integer('student_id');
+            $table->integer('quiz_id');
+            $table->integer('total_marks');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('batches');
+        Schema::dropIfExists('invidual_test_results');
     }
 };

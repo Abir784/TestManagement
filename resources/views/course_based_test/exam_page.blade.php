@@ -14,7 +14,8 @@
     <form id="exam_form" action="{{route('student.exam.post')}}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="quiz_id" value="{{$id}}">
-        <input type="hidden" name="quiz_type" value="1">
+        <input type="hidden" name="quiz_type" value="2">
+
 
         @foreach ($questions as $key=>$question )
 
@@ -138,7 +139,7 @@
 
         function myGreeting() {
 
-            // window.location.replace("/student/Quiz/timeout/"+{{$id}});
+            // window.location.replace("/student/CourseBased/Quiz/timeout/"+{{$id}});
             document.getElementById("exam_form").submit();
 
         }

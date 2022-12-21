@@ -13,19 +13,18 @@
                             <th>#</th>
                             <th>Quiz Name</th>
                             <th>Pass Marks</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse (App\Models\IndependentTest::all() as $key=>$test)
+                        @forelse (App\Models\IndividualTest::all() as $key=>$test)
                         <tr>
                             <td>{{$key+1 }}</td>
                             <td>{{ $test->name}}</td>
                             <td>{{ $test->pass_marks}}</td>
-                            <td> <a href="{{route('quiz.statuschange',$test->id)}}" class="btn btn-success">{{($test->status!=0)?'Active':'Not Active'}}</a></td>
-                            <td><a href="{{route('quiz.indipendent.question.index',$test->id)}}" class="btn btn-primary mb-2"> Add Questions</a>
-                                <a href="{{route('quiz.indipendent.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show Questions</a>
+                            <td><a href="{{route('individual.test.question.index',$test->id)}}" class="btn btn-primary m-2"> Add Questions</a>
+                            <a href="{{route('quiz.individual.question.show',$test->id)}}" class="btn btn-warning m-2"> Show Questions</a>
+                            <a href="{{route('individual.student.index',$test->id)}}" class="btn btn-success m-2">Add Students</a>
                             </td>
 
 
@@ -45,70 +44,58 @@
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-default">
-                    <h3 id="q_title">{{'Create Independent Test'}}
-                    </h3>
-                </div>
+
                 <div class="card-body">
-                        <form action="{{route('quiz.post')}}" method="POST" enctype="multipart/form-data">
+                    <div class="card-title">
+                        <h3>Create Individual Test</h3>
+                      </div>
+                        <form action="{{route('indiviual_test.post')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Test Title:</label>
-                                <input type="text" required name="name" class="form-control form-control-rounded">
+                                <input value="{{old('name')}}" type="text" required name="name" class="form-control form-control-rounded">
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Introduction Text:</label>
-                                <input type="text" required name="introduction_text" class="form-control form-control-rounded">
+                                <input value="{{old('introduction_text')}}"  type="text" required name="introduction_text" class="form-control form-control-rounded">
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Passing Comment:</label>
-                                <input type="text" required name="pass_comment" class="form-control form-control-rounded">
+                                <input value="{{old('passing_comment')}}" type="text" required name="passing_comment" class="form-control form-control-rounded">
                             </div>
                             <div class="mb-3 form-group">
                                 <label for="" class="form-label">Fail Comment:</label>
-                                <input type="text" required name="failing_comment" class="form-control form-control-rounded">
+                                <input type="text" value="{{old('failing_comment')}}"required name="failing_comment" class="form-control form-control-rounded">
                             </div>
                             <div class="mb-3 form-group">
-                                <label for="" class="form-label">Time:</label>
-                                <input type="integer" required name="time" class="form-control form-control-rounded">
-                            </div>
-                            <div class="mb-3 form-group">
-                                <label for="" class="form-label">Show Scores:</label>
-                                <select name="show_scores" id="" class="form-control form-control-rounded">
-                                    <option value="">--Select--</option>
-                                    <option value="1">
-                                        YES
-                                    </option>
-                                    <option value="0">
-                                        NO
-                                    </option>
-                                </select>
+                                <label for="" class="form-label">Time:(Minutes)</label>
+                                <input type="integer" value="{{old('time')}}"  required name="time" class="form-control form-control-rounded">
                             </div>
                             <div class="row form-group">
                                 <div class="m-3 form-group">
                                     <label for="" class="form-label">Start Date:</label>
-                                    <input type="date" required name="start_date" class="form-control form-control-rounded">
+                                    <input type="date" value="{{old('start_date')}}" required name="start_date" class="form-control form-control-rounded">
                                 </div>
 
                                 <div class="m-3 form-group">
                                     <label for="" class="form-label">Start time:</label>
-                                    <input type="time" required name="start_time" class="form-control form-control-rounded">
+                                    <input type="time" value="{{old('start_time')}}" required name="start_time" class="form-control form-control-rounded">
                                 </div>
 
                                 <div class="m-3 form-group">
                                     <label for="" class="form-label">End Date:</label>
-                                    <input type="date" required name="end_date" class="form-control form-control-rounded">
+                                    <input type="date" value="{{old('end_date')}}" required name="end_date" class="form-control form-control-rounded">
                                 </div>
 
                                 <div class="m-3 form-group">
                                     <label for="" class="form-label">End time:</label>
-                                    <input type="time" required name="end_time" class="form-control form-control-rounded">
+                                    <input type="time" value="{{old('end_time')}}" required name="end_time" class="form-control form-control-rounded">
                                 </div>
                             </div>
 
                             <div class="m-3 form-group">
                                 <label for="" class="form-label">Pass Marks:</label>
-                                <input type="number" required name="pass_marks" class="form-control form-control-rounded">
+                                <input type="number" value="{{old('pass_marks')}}" required name="pass_marks" class="form-control form-control-rounded">
                             </div>
                             <div class="m-3 form-group">
                                 <button type="submit" class="btn btn-success btn-rounded">Submit</button>
@@ -125,14 +112,24 @@
 @section('js_code')
 
 <script>
+    $('#course_id').change(function(){
+        var course_id = $(this).val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-ClassicEditor
-        .create( document.querySelector( '#editor' ) )
-        .catch( error => {
-            console.error( error );
-        } );
-
- </script>
+     $.ajax({
+        type:'POST',
+        url:'/getBatch',
+        data:{'course_id':course_id},
+        success:function(data){
+            $('#batch_id').html(data);
+        }
+    });
+})
+</script>
 
 
 @if (session('success'))

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\CoursedBasedAssignment;
 use App\Models\IndependentTest;
 use App\Models\IndependentTestQuestions;
 use App\Models\Question;
@@ -9,7 +11,7 @@ use App\Models\QuestionModules;
 use App\Models\subject;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+use Intervention\Image\Facades\Image;
 
 use function GuzzleHttp\Promise\all;
 
@@ -26,6 +28,7 @@ class QuizController extends Controller
             'introduction_text'=>$request->introduction_text,
             'passing_comments'=>$request->pass_comment,
             'failing_comments'=>$request->failing_comment,
+            'time'=>$request->time,
             'start_date'=>$request->start_date,
             'start_time'=>$request->start_time,
             'end_date'=>$request->end_date,
@@ -98,7 +101,6 @@ class QuizController extends Controller
         $quiz_id=$request->quiz_id;
 
 
-        // print_r($request->all());
 
         foreach($questions as $question){
             IndependentTestQuestions::create([
@@ -139,5 +141,44 @@ class QuizController extends Controller
         }
         return back();
 
+    }
+
+    function AssignmentIndex(){
+        $course=Course::all();
+        return view('assignment.index',[
+            'course'=>$course,
+        ]);
+
+    }
+    function AssignmentPost(Request $request){
+       $request->validate([
+        'file'=>'required|mimes:pdf|max:10240'
+
+
+       ],
+    [
+        'file.required'=>'You have to upload a file',
+    ]);
+        $id=CoursedBasedAssignment::insertGetId([
+            'title'=>$request->name,
+            'course_id'=>$request->course_id,
+            'batch_id'=>$request->batch_id,
+            'deadline'=>$request->deadline,
+            'full_marks'=>$request->pass_marks,
+            'created_at'=>Carbon::now(),
+        ]);
+
+        $extention=$request->file->getClientOriginalExtension();
+        $file_name=$id.".".$extention;
+
+        $request->file->move(public_path('assets/uploads/assignments/'.$file_name));
+
+        CoursedBasedAssignment::where('id',$id)->update([
+
+            'file_name'=>$file_name,
+            'updated_at'=>Carbon::now(),
+        ]);
+
+        return back();
     }
 }

@@ -3,12 +3,15 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\QuestionBankController;
+use App\Http\Controllers\IndividualTestController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentCourseBasedTestController;
 use App\Http\Controllers\StudentQuizController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\AdminMiddleware;
+use App\Models\CoursedBasedAssignment;
 use App\Models\QuestionModules;
 
 /*
@@ -25,6 +28,7 @@ use App\Models\QuestionModules;
 
 
 Route::post('/getBatch',[CourseController::class, 'Ajax']);
+Route::post('/getBatch2',[CourseController::class, 'Ajax']);
 Route::post('/getModule',[QuizController::class,'Ajax']);
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Auth::routes();
@@ -72,18 +76,46 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::post('IndependentSpecificQuizQuestionPost',[QuizController::class,'InpendentSpecificQuestionPost'])->name('independent.specific.quiz.question.post');
   Route::get('/InpendentQuestionShow/{quiz_id}',[QuizController::class,'IndependentQuestionShow'])->name('quiz.indipendent.question.show');
   Route::get('/StatusChange/{quiz_id}',[QuizController::class,'StatusChange'])->name('quiz.statuschange');
-
   Route::post('IndependentSpecificQuizQuestionAdd',[QuizController::class,'IndependentSpecificQuizQuestionAdd'])->name('independent.add.quiz.question.post');
+  Route::get('/index/course_based_test',[StudentCourseBasedTestController::class,'index'])->name('course_based_test.index');
+  Route::post('CourseBased/QuizPost',[StudentCourseBasedTestController::class,'QuizPost'])->name('course_based_quiz.post');
+  Route::get('/CourseBased/Questions/{id}',[StudentCourseBasedTestController::class,'QuestionIndex'])->name('quiz.course_based.question.index');
+  Route::post('CourseBasedQuizQuestionPost',[StudentCourseBasedTestController::class,'QuestionPost'])->name('course_based.quiz.question.post');
+  Route::post('SpecificQuizQuestionPost',[StudentCourseBasedTestController::class,'SpecificQuizQuestionPost'])->name('course_based.specific.quiz.question.post');
+  Route::post('SpecificQuizQuestionAdd',[StudentCourseBasedTestController::class,'SpecificQuizQuestionAdd'])->name('course_based.add.quiz.question.post');
+  Route::get('/CourseBasedQuestionShow/{quiz_id}',[StudentCourseBasedTestController::class,'QuestionShow'])->name('quiz.course_based.question.show');
+  Route::get('Assignment/index', [QuizController::class, 'AssignmentIndex'])->name('assignment.index');
+  Route::post('/AssignmentPost',[QuizController::class, 'AssignmentPost'])->name('course_based_assigmnet.post');
+  Route::get('/index/invidual_test',[IndividualTestController::class,'index'])->name('individual_test.index');
+  Route::post('/invidual_test/post',[IndividualTestController::class,'QuizPost'])->name('indiviual_test.post');
+  Route::get('/index/invidual_test/student/{quiz_id}',[IndividualTestController::class,'student_add_index'])->name('individual.student.index');
+  Route::post('/index/invidual_test/student/post',[IndividualTestController::class,'StudentPost'])->name('individual.student.post');
+  Route::get('/index/invidual_test/add_question/{quiz_id}',[IndividualTestController::class,'QuestionIndex'])->name('individual.test.question.index');
+  Route::post('IndividualQuizQuestionPost',[IndividualTestController::class,'QuestionPost'])->name('individual.quiz.question.post');
+  Route::post('IndivudualSpecificQuizQuestionPost',[IndividualTestController::class,'SpecificQuizQuestionPost'])->name('individual.specific.quiz.question.post');
+  Route::post('IndividualSpecificQuizQuestionAdd',[IndividualTestController::class,'SpecificQuizQuestionAdd'])->name('individual.add.quiz.question.post');
+  Route::get('/IndvidualQuestionShow/{quiz_id}',[IndividualTestController::class,'QuestionShow'])->name('quiz.individual.question.show');
 
 
+
+
+
+
+//
 });
 
 //student routes
 Route::group(['middleware'=>['auth'],'prefix'=>'student',],function(){
     //Quiz Part
     Route::get('/Quiz/Index',[StudentQuizController::class,'QuizIndex'])->name('student.quiz.index');
+    Route::get('/Assignment/Index',[StudentQuizController::class,'AssignmentIndex'])->name('student.assignment.index');
     Route::get('/Quiz/exam/{id}',[StudentQuizController::class,'ExamIndex'])->name('student.exam.index');
     Route::post('/Quiz/exam/post',[StudentQuizController::class,'ExamPost'])->name('student.exam.post');
+    Route::get('/Quiz/timeout/{quiz_id}',[StudentQuizController::class,'ExamTimeout']);
+    Route::get('/Quiz/course_based/exam/{id}',[StudentCourseBasedTestController::class,'ExamIndex'])->name('student.course_based.exam.index');
+    Route::get('/CourseBased/Quiz/timeout/{quiz_id}',[StudentCourseBasedTestController::class,'ExamTimeout']);
+    Route::get('/Quiz/individual/exam/{id}',[IndividualTestController::class,'ExamIndex'])->name('student.individual.exam.index');
+    Route::get('/individual/Quiz/timeout/{quiz_id}',[IndividualTestController::class,'ExamTimeout']);
 
 });
 
