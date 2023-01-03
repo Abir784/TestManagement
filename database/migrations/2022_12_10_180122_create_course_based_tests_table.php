@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('course_id');
             $table->integer('batch_id');
-            $table->integer('time');
+            $table->integer('time')->default(0);
             $table->string('introduction_text');
             $table->string('passing_comments');
             $table->string('failing_comments');

@@ -27,16 +27,86 @@ class StudentQuizController extends Controller
 {
     function QuizIndex(){
 
-        // dd(Carbon::now());
-        // dd(Carbon::now()->format('Y-m-d'),Carbon::now()->format('h:i:s'));
-        // $independent_quiz=IndependentTest::whereDate('start_date','>=',Carbon::now()->format("Y-m-d"))
-        // ->whereDate('end_date','<=',Carbon::now()->format("Y-m-d"))->get();
-        $student=Student::where('user_id',Auth::id())->first();
+         //for checking the student id
+         $student=Student::where('user_id',Auth::id())->first();
+
+          //Getting the current time
+          $date=Carbon::now()->format('Y-m-d');
+          $time=Carbon::now()->format('H:i:s');
 
 
-          $invidual_test=IndividualTest::all();
-          $independent_quiz=IndependentTest::all();
-          $course_based_quiz=CourseBasedTest::where('course_id',$student->course_id)->where('batch_id',$student->batch_id)->get();
+          //Independent Tests
+          $independent=IndependentTest::where('start_date','<=',$date)->where('end_date','>=',$date)->get();
+          $independent_quiz=[];
+          foreach($independent as $key=>$quiz){
+             if(Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
+                if($quiz->start_time <= $time && $quiz->end_time > $time){
+                    $independent_quiz[]=$quiz;
+                }
+             }elseif(Carbon::parse($quiz->start_date)->isToday() && !Carbon::parse($quiz->end_date)->isToday() ){
+                if($quiz->start_time <= $time){
+                    $independent_quiz[]=$quiz;
+                }
+             }elseif( !Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
+                if($quiz->end_time > $time){
+                    $independent_quiz[]=$quiz;
+
+                }
+             }else{
+                $independent_quiz[]=$quiz;
+             }
+          }
+
+
+
+
+           //Course Based Tests
+
+         $course_based=CourseBasedTest::where('course_id',$student->course_id)->where('batch_id',$student->batch_id)->where('start_date','<=',$date)->where('end_date','>=',$date)->get();
+          $course_based_quiz=[];
+          foreach($course_based as $key=>$quiz){
+             if(Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
+                if($quiz->start_time <= $time && $quiz->end_time > $time){
+                    $course_based_quiz[]=$quiz;
+                }
+             }elseif(Carbon::parse($quiz->start_date)->isToday() && !Carbon::parse($quiz->end_date)->isToday() ){
+                if($quiz->start_time <= $time){
+                    $course_based_quiz[]=$quiz;
+                }
+             }elseif( !Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
+                if($quiz->end_time > $time){
+                    $course_based_quiz[]=$quiz;
+
+                }
+             }else{
+                $course_based_quiz[]=$quiz;
+             }
+          }
+
+
+
+              //Indivdiual Tests
+          $invidual=IndividualTest::where('start_date','<=',$date)->where('end_date','>=',$date)->get();
+          $invidual_test=[];
+          foreach($invidual as $key=>$quiz){
+             if(Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
+                if($quiz->start_time <= $time && $quiz->end_time > $time){
+                    $invidual_test[]=$quiz;
+                }
+             }elseif(Carbon::parse($quiz->start_date)->isToday() && !Carbon::parse($quiz->end_date)->isToday() ){
+                if($quiz->start_time <= $time){
+                    $invidual_test[]=$quiz;
+                }
+             }elseif( !Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
+                if($quiz->end_time > $time){
+                    $invidual_test[]=$quiz;
+
+                }
+             }else{
+                $invidual_test[]=$quiz;
+             }
+          }
+
         return view('student_test.index',[
             'invidual_test'=>$invidual_test,
             'independent_quiz'=>$independent_quiz,
@@ -239,21 +309,6 @@ class StudentQuizController extends Controller
         $data=[$marks,$comment];
         return redirect('/')->with('success',$data);
     }
-
-    function ExamTimeout($id){
-        $student=Student::where('user_id',Auth::id())->first();
-        IndependentTestResult::create([
-
-            'student_id'=>$student->id,
-            'quiz_id'=>$id,
-            'total_marks'=>0,
-            'created_at'=>Carbon::now(),
-
-        ]);
-
-        return redirect('/')->with('timeout',"Sorry, you couldn't Submit on time <br> thats why you have got 0 marks. ");
-
-    }
     function AssignmentIndex(){
             $student=Student::where('user_id',Auth::id())->first();
 
@@ -265,3 +320,5 @@ class StudentQuizController extends Controller
     }
 
 }
+
+

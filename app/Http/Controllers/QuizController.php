@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CoursedBasedAssignment;
+use App\Models\IndependentDescriptiveAnswer;
 use App\Models\IndependentTest;
 use App\Models\IndependentTestQuestions;
 use App\Models\Question;
@@ -26,8 +27,8 @@ class QuizController extends Controller
         IndependentTest::create([
             'name'=>$request->name,
             'introduction_text'=>$request->introduction_text,
-            'passing_comments'=>$request->pass_comment,
-            'failing_comments'=>$request->failing_comment,
+            'passing_comment'=>$request->pass_comment,
+            'failing_comment'=>$request->failing_comment,
             'time'=>$request->time,
             'start_date'=>$request->start_date,
             'start_time'=>$request->start_time,
@@ -99,8 +100,6 @@ class QuizController extends Controller
     function IndependentSpecificQuizQuestionAdd(Request $request){
         $questions=$request->question_id;
         $quiz_id=$request->quiz_id;
-
-
 
         foreach($questions as $question){
             IndependentTestQuestions::create([
@@ -181,4 +180,33 @@ class QuizController extends Controller
 
         return back();
     }
+    function DescriptiveMarkingIndex(){
+        $submissions=IndependentDescriptiveAnswer::where('status',0)->get();
+        return view('tests.descriptive_index',[
+            'submissions'=>$submissions,
+        ]);
+    }
+    function DescriptiveMarkingMarking($id){
+        $script=IndependentDescriptiveAnswer::where('id',$id)->first();
+        // dd($script);
+        return view('tests.marking',[
+            'script'=>$script,
+        ]);
+    }
+    function DescriptiveMarkingMarkingPost(Request $request){
+        $question=IndependentDescriptiveAnswer::where('id',$request->id)->first();
+
+        if($request->mark > $question->rel_to_question->marks){
+            return back()->with('error','Full marks for this question is '.$question->rel_to_question->marks);
+        }else{
+            $question->update([
+                'mark'=>$request->mark,
+                'status'=>1,
+                'updated_at'=>now(),
+            ]);
+            return back()->with('success','Successfully Examined');
+        }
+
+    }
+
 }

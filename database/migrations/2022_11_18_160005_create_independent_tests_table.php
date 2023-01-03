@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('introduction_text');
-            $table->text('passing_comment');
-            $table->text('failing_comment');
-            $table->boolean('show_scores');
+            $table->text('passing_comments');
+            $table->integer('time')->default(0);
+            $table->text('failing_comments');
+            $table->boolean('show_scores')->nullable();
             $table->string('status');
             $table->date('start_date');
             $table->time('start_time');

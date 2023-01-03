@@ -154,9 +154,31 @@ class IndividualTestController extends Controller
           ]);
         }
         function DescriptiveMarkingIndex(){
-            $submissions=IndividualTestDescriptiveAnswer::all();
+            $submissions=IndividualTestDescriptiveAnswer::where('status',0)->get();
             return view('individual_test.descriptive_index',[
                 'submissions'=>$submissions,
             ]);
+        }
+        function DescriptiveMarkingMarking($id){
+            $script=IndividualTestDescriptiveAnswer::where('id',$id)->first();
+            // dd($script);
+            return view('individual_test.marking',[
+                'script'=>$script,
+            ]);
+        }
+        function DescriptiveMarkingMarkingPost(Request $request){
+            $question=IndividualTestDescriptiveAnswer::where('id',$request->id)->first();
+
+            if($request->mark > $question->rel_to_question->marks){
+                return back()->with('error','Full marks for this question is '.$question->rel_to_question->marks);
+            }else{
+                $question->update([
+                    'mark'=>$request->mark,
+                    'status'=>1,
+                    'updated_at'=>now(),
+                ]);
+                return back()->with('success','Successfully Examined');
+            }
+
         }
 }

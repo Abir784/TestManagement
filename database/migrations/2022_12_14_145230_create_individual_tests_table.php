@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('individual_tests', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('time');
+            $table->integer('time')->default(0);
             $table->string('introduction_text');
             $table->string('passing_comments');
             $table->string('failing_comments');

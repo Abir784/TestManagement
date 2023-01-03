@@ -138,11 +138,10 @@
   const myTimeout = setTimeout(myGreeting, {{$time}}*60000);
 
         function myGreeting() {
-
-            // window.location.replace("/student/individual/Quiz/timeout/"+{{$id}});
             document.getElementById("exam_form").submit();
         }
 </script>
+
 <script>
     setInterval(displayHello, 1000);
     var start={{$time}}*60;

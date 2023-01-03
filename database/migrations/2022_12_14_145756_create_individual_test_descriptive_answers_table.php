@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('question_id');
             $table->string('answer');
             $table->integer('mark');
+            $table->integer('status');
             $table->timestamps();
         });
     }

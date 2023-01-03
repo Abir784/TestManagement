@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\CourseBasedQuizQuestion;
 use App\Models\CourseBasedTest;
 use App\Models\CourseBasedTestResult;
+use App\Models\CoursedBasedDescriptiveAnswer;
 use App\Models\Question;
 use App\Models\Student;
 use App\Models\subject;
@@ -118,16 +119,31 @@ class StudentCourseBasedTestController extends Controller
           'time'=>$quiz->time,
       ]);
     }
-    function ExamTimeout($id){
-        $student=Student::where('user_id',Auth::id())->first();
-        CourseBasedTestResult::create([
-            'student_id'=>$student->id,
-            'quiz_id'=>$id,
-            'total_marks'=>0,
-            'created_at'=>Carbon::now(),
-
+    function DescriptiveMarkingIndex(){
+        $submissions=CoursedBasedDescriptiveAnswer::where('status',0)->get();
+        return view('course_based_test.descriptive_index',[
+            'submissions'=>$submissions,
         ]);
+    }
+    function DescriptiveMarkingMarking($id){
+        $script=CoursedBasedDescriptiveAnswer::where('id',$id)->first();
+        return view('course_based_test.marking',[
+            'script'=>$script,
+        ]);
+    }
+    function DescriptiveMarkingMarkingPost(Request $request){
+        $question=CoursedBasedDescriptiveAnswer::where('id',$request->id)->first();
 
-        return redirect('/')->with('timeout',"Sorry, you couldn't Submit on time <br> thats why you have got 0 marks. ");
+        if($request->mark > $question->rel_to_question->marks){
+            return back()->with('error','Full marks for this question is '.$question->rel_to_question->marks);
+        }else{
+            $question->update([
+                'mark'=>$request->mark,
+                'status'=>1,
+                'updated_at'=>now(),
+            ]);
+            return back()->with('success','Successfully Examined');
+        }
+
     }
 }

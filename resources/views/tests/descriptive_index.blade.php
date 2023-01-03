@@ -5,7 +5,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Individual Descriptive Answers Marking</h5>
+                    <h5 class="card-title">Independent Descriptive Answers Marking</h5>
                     <p class="card-text"></p>
                    <table class="table table-light">
                     <thead class="thead-dark">
@@ -26,7 +26,7 @@
                             <td>{{$answer->rel_to_quiz->name}}</td>
                             <td>{{$answer->rel_to_question->title}}</td>
                             <td>{{$answer->rel_to_question->marks}}</td>
-                            <td><a href="{{route('individual.marking',$answer->id)}}" class="btn btn-primary mr-3">Examine</a></td>
+                            <td><a href="{{route('independent.marking',$answer->id)}}" class="btn btn-primary mr-3">Examine</a></td>
                         </tr>
 
                         @empty

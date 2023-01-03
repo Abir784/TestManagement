@@ -95,8 +95,20 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::post('IndivudualSpecificQuizQuestionPost',[IndividualTestController::class,'SpecificQuizQuestionPost'])->name('individual.specific.quiz.question.post');
   Route::post('IndividualSpecificQuizQuestionAdd',[IndividualTestController::class,'SpecificQuizQuestionAdd'])->name('individual.add.quiz.question.post');
   Route::get('/IndvidualQuestionShow/{quiz_id}',[IndividualTestController::class,'QuestionShow'])->name('quiz.individual.question.show');
-  //Descriptive answers marking
+  // Individual Descriptive answers marking
   Route::get('Individual/DescriptiveAnswerMarking/Index',[IndividualTestController::class,'DescriptiveMarkingIndex']);
+  Route::get('Individual/DescriptiveAnswerMarking/Marking/{id}',[IndividualTestController::class,'DescriptiveMarkingMarking'])->name('individual.marking');
+  Route::post('Individual/DescriptiveAnswerMarking/Marking/post',[IndividualTestController::class,'DescriptiveMarkingMarkingPost'])->name('individual.marking.post');
+  // Course Based Descriptive answers marking
+  Route::get('CourseBased/DescriptiveAnswerMarking/Index',[StudentCourseBasedTestController::class,'DescriptiveMarkingIndex']);
+  Route::get('CourseBased/DescriptiveAnswerMarking/Marking/{id}',[StudentCourseBasedTestController::class,'DescriptiveMarkingMarking'])->name('course_based.marking');
+  Route::post('CourseBased/DescriptiveAnswerMarking/Marking/post',[StudentCourseBasedTestController::class,'DescriptiveMarkingMarkingPost'])->name('course_based.marking.post');
+  // Independent Descriptive answers marking
+  Route::get('independent/DescriptiveAnswerMarking/Index',[QuizController::class,'DescriptiveMarkingIndex']);
+  Route::get('independent/DescriptiveAnswerMarking/Marking/{id}',[QuizController::class,'DescriptiveMarkingMarking'])->name('independent.marking');
+  Route::post('independent/DescriptiveAnswerMarking/Marking/post',[QuizController::class,'DescriptiveMarkingMarkingPost'])->name('independent.marking.post');
+
+
 
 
 
