@@ -565,18 +565,20 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{route('student.quiz.index')}}">Take Quiz</a>
                                     <a class="dropdown-item" href="{{route('student.assignment.index')}}">Assignments</a>
-                                    {{-- <a class="dropdown-item" href="fluid-student-series.html">Series</a>
-                                    <a class="dropdown-item" href="fluid-student-courses.html">Courses</a>
-                                    <a class="dropdown-item" href="fluid-student-course.html">Course Lessons</a>
-                                    <a class="dropdown-item" href="fluid-student-take-course.html">Take Course</a>
-                                    <a class="dropdown-item" href="fluid-student-take-quiz.html">Take Quiz</a>
-                                    <a class="dropdown-item" href="fluid-student-billing.html">Billing</a>
-                                    <a class="dropdown-item" href="fluid-student-edit-account.html">Edit Account</a>
-                                    <a class="dropdown-item" href="fluid-student-profile.html">Student Profile</a>
-                                    <a class="dropdown-item" href="login.html">Login</a>
-                                    <a class="dropdown-item" href="sign-up.html">Sign Up</a> --}}
+
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Results</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Coursed Based Quiz Results</a>
+                                    <a class="dropdown-item" href="#">Free Quiz Results</a>
+                                    <a class="dropdown-item" href="#">Individual Quiz Results</a>
+
+                                </div>
+                            </li>
+
                             @endif
                             @if (Auth::user()->role!=2)
 
@@ -612,8 +614,8 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item active" href="{{route('quiz.index')}}">Create Independent Quiz</a>
                                     <a class="dropdown-item active" href="{{route('course_based_test.index')}}">Create Course Based Quiz</a>
-                                    <a class="dropdown-item active" href="{{route('assignment.index')}}">Create Assignment</a>
                                     <a class="dropdown-item active" href="{{route('individual_test.index')}}">Create Individual Quiz</a>
+                                    <a class="dropdown-item active" href="{{route('assignment.index')}}">Create Assignment</a>
 
                             </li>
                             <li class="nav-item dropdown active">
@@ -622,6 +624,7 @@
                                     <a class="dropdown-item active" href="{{ url('admin/independent/DescriptiveAnswerMarking/Index')}}">Independent Descriptive Answers</a>
                                     <a class="dropdown-item active" href="{{ url('admin/CourseBased/DescriptiveAnswerMarking/Index')}}">Course Based Descriptive Answers</a>
                                     <a class="dropdown-item active" href="{{ url('admin/Individual/DescriptiveAnswerMarking/Index')}}">Individual Descriptive Answers</a>
+                                    <a class="dropdown-item active" href="{{url('admin/Assignment/Index')}}">Assignment Submissions</a>
 
                             </li>
 
@@ -636,12 +639,7 @@
 
             <div class="container-fluid page__container">
                 @yield('content')
-
-
-
             </div>
-
-
 
             <div class="bg-dark text-white" id="footer">
                 <div class="container-fluid page__container">
@@ -656,7 +654,7 @@
                                         </g>
                                     </svg>
                                 </span>
-                                LEMA
+                                Test Management
                             </a>
                         </div>
                         <div class="col-md-9">
@@ -712,7 +710,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="col-sm-6 col-md-3">
+                                <div class="col-sm-6 col-md-3 m-auto">
                                     <h5>Contact us</h5>
                                     <p class="text-light">Street Name, Suite 12<br /> Dublin, Ireland</p>
 

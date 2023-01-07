@@ -27,8 +27,8 @@ class QuizController extends Controller
         IndependentTest::create([
             'name'=>$request->name,
             'introduction_text'=>$request->introduction_text,
-            'passing_comment'=>$request->pass_comment,
-            'failing_comment'=>$request->failing_comment,
+            'passing_comments'=>$request->pass_comment,
+            'failing_comments'=>$request->failing_comment,
             'time'=>$request->time,
             'start_date'=>$request->start_date,
             'start_time'=>$request->start_time,
@@ -151,8 +151,7 @@ class QuizController extends Controller
     }
     function AssignmentPost(Request $request){
        $request->validate([
-        'file'=>'required|mimes:pdf|max:10240'
-
+        'file'=>'required|mimes:pdf,csv,xlxx,docs|max:10240'
 
        ],
     [
@@ -170,10 +169,9 @@ class QuizController extends Controller
         $extention=$request->file->getClientOriginalExtension();
         $file_name=$id.".".$extention;
 
-        $request->file->move(public_path('assets/uploads/assignments/'.$file_name));
+        $request->file->move(public_path('assets/uploads/assignments/'),$file_name);
 
         CoursedBasedAssignment::where('id',$id)->update([
-
             'file_name'=>$file_name,
             'updated_at'=>Carbon::now(),
         ]);
@@ -188,7 +186,7 @@ class QuizController extends Controller
     }
     function DescriptiveMarkingMarking($id){
         $script=IndependentDescriptiveAnswer::where('id',$id)->first();
-        // dd($script);
+
         return view('tests.marking',[
             'script'=>$script,
         ]);
@@ -206,6 +204,44 @@ class QuizController extends Controller
             ]);
             return back()->with('success','Successfully Examined');
         }
+
+    }
+    function delete($id){
+        $questions=IndependentTestQuestions::where('quiz_id',$id)->get();
+        foreach($questions as $question){
+            $question->delete();
+        }
+
+        IndependentTest::find($id)->delete();
+        return back();
+
+    }
+    function edit($id){
+      $quiz=IndependentTest::find($id)->first();
+        return view('tests.edit',[
+            'quiz'=>$quiz,
+        ]);
+
+    }
+    function update(Request $request){
+    
+        IndependentTest::find($request->id)->update([
+            'name'=>$request->name,
+            'introduction_text'=>$request->introduction_text,
+            'passing_comments'=>$request->pass_comment,
+            'failing_comments'=>$request->failing_comment,
+            'time'=>$request->time,
+            'start_date'=>$request->start_date,
+            'start_time'=>$request->start_time,
+            'end_date'=>$request->end_date,
+            'end_time'=>$request->end_time,
+            'pass_marks'=>$request->pass_marks,
+            'created_at'=>Carbon::now(),
+        ]);
+
+
+
+        return redirect(route('quiz.index'))->with('update','Successfull');
 
     }
 

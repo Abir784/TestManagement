@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\IndividualTestController;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\AdminMiddleware;
 use App\Models\CoursedBasedAssignment;
 use App\Models\QuestionModules;
+use App\Models\Student;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +97,16 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::post('IndivudualSpecificQuizQuestionPost',[IndividualTestController::class,'SpecificQuizQuestionPost'])->name('individual.specific.quiz.question.post');
   Route::post('IndividualSpecificQuizQuestionAdd',[IndividualTestController::class,'SpecificQuizQuestionAdd'])->name('individual.add.quiz.question.post');
   Route::get('/IndvidualQuestionShow/{quiz_id}',[IndividualTestController::class,'QuestionShow'])->name('quiz.individual.question.show');
+  Route::get('/IndependentQuiz/Delete/{quiz_id}',[QuizController::class,'delete'])->name('independentquiz.delete');
+  Route::get('/IndependentQuiz/edit/{quiz_id}',[QuizController::class,'edit'])->name('independentquiz.edit');
+  Route::post('/IndependentQuiz/update',[QuizController::class,'update'])->name('quiz.update');
+  Route::get('/individualQuiz/edit/{quiz_id}',[IndividualTestController::class,'edit'])->name('individualquiz.edit');
+  Route::post('/individualQuiz/update',[IndividualTestController::class,'update'])->name('individualquiz.update');
+  Route::get('/individualQuiz/Delete/{quiz_id}',[IndividualTestController::class,'delete'])->name('individualquiz.delete');
+  Route::get('/course_based_quiz/edit/{quiz_id}',[StudentCourseBasedTestController::class,'edit'])->name('course_based_quiz.edit');
+  Route::post('/course_based_quiz/update',[StudentCourseBasedTestController::class,'update'])->name('course_based_quiz.update');
+  Route::get('/course_based_quiz/Delete/{quiz_id}',[StudentCourseBasedTestController::class,'delete'])->name('course_based_quiz.delete');
+
   // Individual Descriptive answers marking
   Route::get('Individual/DescriptiveAnswerMarking/Index',[IndividualTestController::class,'DescriptiveMarkingIndex']);
   Route::get('Individual/DescriptiveAnswerMarking/Marking/{id}',[IndividualTestController::class,'DescriptiveMarkingMarking'])->name('individual.marking');
@@ -107,6 +119,10 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::get('independent/DescriptiveAnswerMarking/Index',[QuizController::class,'DescriptiveMarkingIndex']);
   Route::get('independent/DescriptiveAnswerMarking/Marking/{id}',[QuizController::class,'DescriptiveMarkingMarking'])->name('independent.marking');
   Route::post('independent/DescriptiveAnswerMarking/Marking/post',[QuizController::class,'DescriptiveMarkingMarkingPost'])->name('independent.marking.post');
+  // Assignment Marking
+  Route::get('/Assignment/Index',[AssignmentController::class,'Index']);
+  Route::get('Assignment/Marking/{id}',[AssignmentController::class,'Marking'])->name('assignment.marking');
+  Route::post('Assignment/Marking/post',[AssignmentController::class,'MarkingPost'])->name('assignment.marking.post');
 
 
 
@@ -128,7 +144,9 @@ Route::group(['middleware'=>['auth'],'prefix'=>'student',],function(){
     Route::get('/Quiz/course_based/exam/{id}',[StudentCourseBasedTestController::class,'ExamIndex'])->name('student.course_based.exam.index');
     Route::get('/CourseBased/Quiz/timeout/{quiz_id}',[StudentCourseBasedTestController::class,'ExamTimeout']);
     Route::get('/Quiz/individual/exam/{id}',[IndividualTestController::class,'ExamIndex'])->name('student.individual.exam.index');
-    Route::get('/individual/Quiz/timeout/{quiz_id}',[IndividualTestController::class,'ExamTimeout']);
+    //assignment part
+    Route::get('/assignment/submission/{id}',[StudentController::class,'AssignmentIndex'])->name('assignment.student.index');
+    Route::post('/assignment/submission',[StudentController::class,'AssignmentPost'])->name('assignment.student.post');
 
 });
 

@@ -15,6 +15,7 @@
                             <th>Course Name</th>
                             <th>Batch Name</th>
                             <th>Pass Marks</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -25,9 +26,21 @@
                             <td>{{ $test->name}}</td>
                             <td>{{ $test->rel_to_course->name}}</td>
                             <td>{{ $test->rel_to_batch->batch_name}}</td>
+                            <td>@if (($test->start_date > Carbon\Carbon::now()->format('Y-m-d') && $test->start_time >  Carbon\Carbon::now()->format('H:i:s')) || $test->start_date > Carbon\Carbon::now()->format('Y-m-d'))
+                                {{'Starts at '.Carbon\Carbon::parse($test->start_date)->format('d-M-Y').','.Carbon\Carbon::parse($test->start_time)->format('h:i A')}}
+                              @elseif (($test->start_date <= Carbon\Carbon::now()->format('Y-m-d') && $test->start_time <=  Carbon\Carbon::now()->format('H:i:s')) && ($test->end_date >= Carbon\Carbon::now()->format('Y-m-d') && $test->end_time > Carbon\Carbon::now()->format('H:i:s')) || ($test->end_date >= Carbon\Carbon::now()->format('Y-m-d')) )
+                                {{'Exam Ongoing'}}
+                              @else
+                               {{'Expired'}}
+
+                              @endif
+                            </td>
                             <td>{{ $test->pass_marks}}</td>
-                            <td><a href="{{route('quiz.course_based.question.index',$test->id)}}" class="btn btn-primary mb-2"> Add Questions</a>
-                                <a href="{{route('quiz.course_based.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show Questions</a>
+                        <td>
+                                <a href="{{route('quiz.course_based.question.index',$test->id)}}" class="btn btn-primary mb-2">   Add<br>Questions</a>
+                                <a href="{{route('quiz.course_based.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show<br>Questions</a>
+                                <a href="{{route('course_based_quiz.delete',$test->id)}}" class="btn btn-danger mb-2">Delete</a>
+                                <a href="{{route('course_based_quiz.edit',$test->id)}}" class="btn btn-secondary mb-2">Edit</a>
                             </td>
 
 
@@ -47,8 +60,8 @@
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-default">
-                    <h3 id="q_title">{{'Create Course Based Test'}}
+                <div class="card-title bg-default m-auto">
+                    <h3 class="mt-4">{{'Create Course Based Test'}}
                     </h3>
                 </div>
                 <div class="card-body">
@@ -169,6 +182,28 @@
 Toast.fire({
   icon: 'success',
   title: 'Quiz Added successfully'
+})
+</script>
+@endif
+
+
+@if (session('update'))
+
+<script>
+ const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 2500,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+Toast.fire({
+  icon: 'success',
+  title: 'Quiz Updated successfully'
 })
 </script>
 @endif

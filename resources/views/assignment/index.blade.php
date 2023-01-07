@@ -29,7 +29,7 @@
                             <td>{{  Carbon\Carbon::parse($test->deadline)->format('d-M-y')}}</td>
                             <td>{{ $test->full_marks}}</td>
                             <td>
-                                    <a href="#" class="btn btn-danger btn-rounded">Delete</a>
+                                    <a href="" class="btn btn-danger btn-rounded">Delete</a>
                             </td>
 
 

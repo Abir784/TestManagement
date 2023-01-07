@@ -146,4 +146,40 @@ class StudentCourseBasedTestController extends Controller
         }
 
     }
+    function edit($id){
+        $quiz=CourseBasedTest::find($id)->first();
+        return view('course_based_test.edit',[
+            'quiz'=>$quiz,
+        ]);
+
+    }
+    function update(Request $request){
+
+        CourseBasedTest::find($request->id)->update([
+            'name'=>$request->name,
+            'introduction_text'=>$request->introduction_text,
+            'passing_comments'=>$request->pass_comment,
+            'failing_comments'=>$request->failing_comment,
+            'time'=>$request->time,
+            'start_date'=>$request->start_date,
+            'start_time'=>$request->start_time,
+            'end_date'=>$request->end_date,
+            'end_time'=>$request->end_time,
+            'pass_marks'=>$request->pass_marks,
+            'created_at'=>Carbon::now(),
+        ]);
+
+        return redirect(url('admin/index/course_based_test'))->with('update','Successfull');
+    }
+    function delete($id){
+        $questions=CourseBasedQuizQuestion::where('quiz_id',$id)->get();
+        foreach($questions as $question){
+            $question->delete();
+        }
+
+
+        CourseBasedTest::find($id)->delete();
+        return back();
+
+    }
 }

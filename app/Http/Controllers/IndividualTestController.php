@@ -181,4 +181,43 @@ class IndividualTestController extends Controller
             }
 
         }
+    function edit($id){
+        $quiz=IndividualTest::find($id)->first();
+        return view('individual_test.edit',[
+            'quiz'=>$quiz,
+        ]);
+    }
+    function update(Request $request){
+
+        IndividualTest::find($request->id)->update([
+            'name'=>$request->name,
+            'introduction_text'=>$request->introduction_text,
+            'passing_comments'=>$request->pass_comment,
+            'failing_comments'=>$request->failing_comment,
+            'time'=>$request->time,
+            'start_date'=>$request->start_date,
+            'start_time'=>$request->start_time,
+            'end_date'=>$request->end_date,
+            'end_time'=>$request->end_time,
+            'pass_marks'=>$request->pass_marks,
+            'created_at'=>Carbon::now(),
+        ]);
+
+        return redirect(url('admin/index/invidual_test'))->with('update','Successfull');
+    }
+    function delete($id){
+        $questions=IndividualTestQuestion::where('quiz_id',$id)->get();
+        foreach($questions as $question){
+            $question->delete();
+        }
+        //Deleting Students of Individual students tables
+        $students=IndividualTestStudents::where('quiz_id',$id)->get();
+        foreach($students as $student){
+            $student->delete();
+        }
+
+        IndividualTest::find($id)->delete();
+        return back();
+
+    }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('introduction_text');
+            $table->integer('pass_marks');
             $table->text('passing_comments');
             $table->integer('time')->default(0);
             $table->text('failing_comments');

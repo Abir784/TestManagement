@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('course_id');
             $table->integer('batch_id');
             $table->integer('file_name')->nullable();
-            $table->integer('title')->nullable();
+            $table->string('title')->nullable();
             $table->integer('full_marks');
             $table->date('deadline');
             $table->timestamps();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourseBasedAssignmentSubmission;
 use App\Models\CourseBasedTest;
 use App\Models\CourseBasedTestResult;
 use App\Models\CoursedBasedAssignment;
@@ -309,13 +310,17 @@ class StudentQuizController extends Controller
         $data=[$marks,$comment];
         return redirect('/')->with('success',$data);
     }
+
+
     function AssignmentIndex(){
             $student=Student::where('user_id',Auth::id())->first();
 
-            $assignments=CoursedBasedAssignment::where('course_id',$student->course_id)->where('batch_id',$student->batch_id)->get();
+
+            $assignments=CoursedBasedAssignment::where('course_id',$student->course_id)->where('batch_id',$student->batch_id)->where('deadline','>=',Carbon::now()->format('Y-m-d'))->get();
             return view('assignment.student_index',
         [
             'assignments'=>$assignments,
+            'student'=>$student,
         ]);
     }
 

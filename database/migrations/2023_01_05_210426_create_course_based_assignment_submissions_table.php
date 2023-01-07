@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('course_based_assignment_submissions', function (Blueprint $table) {
             $table->id();
-            $table->integer('module_id');
-            $table->string('type');
-            $table->text('title');
-            $table->integer('marks')->default(0);
-            $table->boolean('has_multiple')->nullable();
-            $table->text('answer_explaination')->nullable();
+            $table->integer('assignment_id');
+            $table->integer('student_id');
+            $table->string('file_name')->nullable();
+            $table->integer('mark')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('course_based_assignment_submissions');
     }
 };

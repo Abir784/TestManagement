@@ -13,6 +13,7 @@
                             <th>#</th>
                             <th>Quiz Name</th>
                             <th>Pass Marks</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -22,9 +23,20 @@
                             <td>{{$key+1 }}</td>
                             <td>{{ $test->name}}</td>
                             <td>{{ $test->pass_marks}}</td>
-                            <td><a href="{{route('individual.test.question.index',$test->id)}}" class="btn btn-primary m-2"> Add Questions</a>
-                            <a href="{{route('quiz.individual.question.show',$test->id)}}" class="btn btn-warning m-2"> Show Questions</a>
-                            <a href="{{route('individual.student.index',$test->id)}}" class="btn btn-success m-2">Add Students</a>
+                            <td>@if (($test->start_date > Carbon\Carbon::now()->format('Y-m-d') && $test->start_time >  Carbon\Carbon::now()->format('H:i:s')) || $test->start_date > Carbon\Carbon::now()->format('Y-m-d'))
+                                {{'Starts at '.Carbon\Carbon::parse($test->start_date)->format('d-M-Y').','.Carbon\Carbon::parse($test->start_time)->format('h:i A')}}
+                              @elseif (($test->start_date <= Carbon\Carbon::now()->format('Y-m-d') && $test->start_time <=  Carbon\Carbon::now()->format('H:i:s')) && ($test->end_date >= Carbon\Carbon::now()->format('Y-m-d') && $test->end_time > Carbon\Carbon::now()->format('H:i:s')) || ($test->end_date >= Carbon\Carbon::now()->format('Y-m-d')) )
+                                {{'Exam Ongoing'}}
+                              @else
+                               {{'Expired'}}
+
+                              @endif
+                            </td>
+                            <td><a href="{{route('individual.test.question.index',$test->id)}}" class="btn btn-primary mb-2"> Add<br>Questions</a>
+                            <a href="{{route('quiz.individual.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show<br>Questions</a>
+                            <a href="{{route('individual.student.index',$test->id)}}" class="btn btn-success mb-2">Add<br>Students</a>
+                            <a href="{{route('individualquiz.delete',$test->id)}}" class="btn btn-danger mb-2">Delete</a>
+                            <a href="{{route('individualquiz.edit',$test->id)}}" class="btn btn-secondary mb-2">Edit</a>
                             </td>
 
 
@@ -47,7 +59,7 @@
 
                 <div class="card-body">
                     <div class="card-title">
-                        <h3>Create Individual Test</h3>
+                        <h3 class="m-auto">Create Individual Test</h3>
                       </div>
                         <form action="{{route('indiviual_test.post')}}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -111,27 +123,6 @@
 
 @section('js_code')
 
-<script>
-    $('#course_id').change(function(){
-        var course_id = $(this).val();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-     $.ajax({
-        type:'POST',
-        url:'/getBatch',
-        data:{'course_id':course_id},
-        success:function(data){
-            $('#batch_id').html(data);
-        }
-    });
-})
-</script>
-
-
 @if (session('success'))
 
 <script>
@@ -151,6 +142,32 @@ Toast.fire({
   title: 'Quiz Added successfully'
 })
 </script>
+
+
 @endif
+
+@if (session('update'))
+
+<script>
+ const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 2500,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+Toast.fire({
+  icon: 'success',
+  title: 'Quiz Updated successfully'
+})
+</script>
+
+
+@endif
+
 
 @endsection
