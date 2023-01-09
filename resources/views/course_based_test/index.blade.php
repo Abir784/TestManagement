@@ -14,6 +14,7 @@
                             <th>Quiz Name</th>
                             <th>Course Name</th>
                             <th>Batch Name</th>
+                            <th>Total Marks</th>
                             <th>Pass Marks</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -21,11 +22,22 @@
                     </thead>
                     <tbody>
                         @forelse (App\Models\CourseBasedTest::all() as $key=>$test)
+
+                        @php
+                            $questions=App\Models\CourseBasedQuizQuestion::where('quiz_id',$test->id)->get();
+                            $full_marks=0;
+                            foreach ($questions as  $question) {
+                                $full_marks+=$question->rel_to_question->total_marks;
+                            }
+                        @endphp
+
                         <tr>
                             <td>{{$key+1 }}</td>
                             <td>{{ $test->name}}</td>
                             <td>{{ $test->rel_to_course->name}}</td>
                             <td>{{ $test->rel_to_batch->batch_name}}</td>
+                            <td>{{$full_marks}}</td>
+                            <td>{{ $test->pass_marks}}</td>
                             <td>@if (($test->start_date > Carbon\Carbon::now()->format('Y-m-d') && $test->start_time >  Carbon\Carbon::now()->format('H:i:s')) || $test->start_date > Carbon\Carbon::now()->format('Y-m-d'))
                                 {{'Starts at '.Carbon\Carbon::parse($test->start_date)->format('d-M-Y').','.Carbon\Carbon::parse($test->start_time)->format('h:i A')}}
                               @elseif (($test->start_date <= Carbon\Carbon::now()->format('Y-m-d') && $test->start_time <=  Carbon\Carbon::now()->format('H:i:s')) && ($test->end_date >= Carbon\Carbon::now()->format('Y-m-d') && $test->end_time > Carbon\Carbon::now()->format('H:i:s')) || ($test->end_date >= Carbon\Carbon::now()->format('Y-m-d')) )
@@ -35,12 +47,11 @@
 
                               @endif
                             </td>
-                            <td>{{ $test->pass_marks}}</td>
                         <td>
-                                <a href="{{route('quiz.course_based.question.index',$test->id)}}" class="btn btn-primary mb-2">   Add<br>Questions</a>
-                                <a href="{{route('quiz.course_based.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show<br>Questions</a>
-                                <a href="{{route('course_based_quiz.delete',$test->id)}}" class="btn btn-danger mb-2">Delete</a>
-                                <a href="{{route('course_based_quiz.edit',$test->id)}}" class="btn btn-secondary mb-2">Edit</a>
+                                <a href="{{route('quiz.course_based.question.index',$test->id)}}" class="btn btn-outline-primary btn-rounded mb-2">   Add<br>Questions</a>
+                                <a href="{{route('quiz.course_based.question.show',$test->id)}}" class="btn btn-outline-warning btn-rounded  mb-2"> Show<br>Questions</a>
+                                {{-- <a href="{{route('course_based_quiz.delete',$test->id)}}" class="btn btn-outline-danger btn-rounded mb-2">Delete</a> --}}
+                                <a href="{{route('course_based_quiz.edit',$test->id)}}" class="btn btn-outline-secondary btn-rounded mb-2">Edit</a>
                             </td>
 
 
@@ -101,7 +112,7 @@
                                 <input type="text" required name="failing_comment" class="form-control form-control-rounded">
                             </div>
                             <div class="mb-3 form-group">
-                                <label for="" class="form-label">Time:</label>
+                                <label for="" class="form-label">Time(In Minutes):</label>
                                 <input type="integer" required name="time" class="form-control form-control-rounded">
                             </div>
                             <div class="row form-group">

@@ -12,16 +12,27 @@
                         <tr>
                             <th>#</th>
                             <th>Quiz Name</th>
+                            <th>Full Marks</th>
                             <th>Pass Marks</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        @forelse (App\Models\IndependentTest::all() as $key=>$test)
+                        @forelse ($independent_test as $key=>$test)
+                        @php
+                            $questions=App\Models\IndependentTestQuestions::where('quiz_id',$test->id)->get();
+                            $full_marks=0;
+                            foreach ($questions as  $question) {
+                                $full_marks+=$question->rel_to_question->total_marks;
+                            }
+                        @endphp
+
                         <tr>
                             <td>{{$key+1 }}</td>
                             <td>{{ $test->name}}</td>
+                            <td>{{ $full_marks}}</td>
                             <td>{{ $test->pass_marks}}</td>
                             <td>
                                 @if (($test->start_date > Carbon\Carbon::now()->format('Y-m-d') && $test->start_time >=  Carbon\Carbon::now()->format('H:i:s')) || $test->start_date > Carbon\Carbon::now()->format('Y-m-d'))
@@ -34,10 +45,10 @@
                                 @endif
                             </td>
                            <td>
-                                <a href="{{route('quiz.indipendent.question.index',$test->id)}}" class="btn btn-primary mb-2"> Add<br>Questions</a>
-                                <a href="{{route('quiz.indipendent.question.show',$test->id)}}" class="btn btn-warning mb-2"> Show <br>Questions</a>
-                                <a href="{{route('independentquiz.delete',$test->id)}}" class="btn btn-danger mb-2">Delete</a>
-                                <a href="{{route('independentquiz.edit',$test->id)}}" class="btn btn-secondary mb-2">Edit</a>
+                                <a href="{{route('quiz.indipendent.question.index',$test->id)}}" class="btn btn-outline-primary btn-rounded mb-2"> Add<br>Questions</a>
+                                <a href="{{route('quiz.indipendent.question.show',$test->id)}}" class="btn btn-outline-warning btn-rounded mb-2"> Show <br>Questions</a>
+                                {{-- <a href="{{route('independentquiz.delete',$test->id)}}" class="btn btn-outline-danger btn-rounded mb-2">Delete</a> --}}
+                                <a href="{{route('independentquiz.edit',$test->id)}}" class="btn btn-outline-secondary btn-rounded mb-2">Edit</a>
                             </td>
 
 

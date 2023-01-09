@@ -106,6 +106,11 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::get('/course_based_quiz/edit/{quiz_id}',[StudentCourseBasedTestController::class,'edit'])->name('course_based_quiz.edit');
   Route::post('/course_based_quiz/update',[StudentCourseBasedTestController::class,'update'])->name('course_based_quiz.update');
   Route::get('/course_based_quiz/Delete/{quiz_id}',[StudentCourseBasedTestController::class,'delete'])->name('course_based_quiz.delete');
+  Route::get('/course_based_quiz_question/Delete/{question_id}',[StudentCourseBasedTestController::class,'QuestionDelete'])->name('course_based_quiz_question.delete');
+
+  Route::get('/independent_test_question/Delete/{question_id}',[QuizController::class,'QuestionDelete'])->name('independent_test_question.delete');
+
+  Route::get('/individual_test_question/Delete/{question_id}',[IndividualTestController::class,'QuestionDelete'])->name('individual_test_question.delete');
 
   // Individual Descriptive answers marking
   Route::get('Individual/DescriptiveAnswerMarking/Index',[IndividualTestController::class,'DescriptiveMarkingIndex']);
@@ -130,6 +135,7 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
 
 
 
+
 //
 });
 
@@ -147,6 +153,10 @@ Route::group(['middleware'=>['auth'],'prefix'=>'student',],function(){
     //assignment part
     Route::get('/assignment/submission/{id}',[StudentController::class,'AssignmentIndex'])->name('assignment.student.index');
     Route::post('/assignment/submission',[StudentController::class,'AssignmentPost'])->name('assignment.student.post');
+    //Course Based Exam Result
+    Route::get('/CourseBasedQuizResult/index',[StudentController::class,'CourseBasedQuizResultIndex'])->name('course_based.result');
+    
+
 
 });
 

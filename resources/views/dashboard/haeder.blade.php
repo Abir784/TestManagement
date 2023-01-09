@@ -572,7 +572,7 @@
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Results</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Coursed Based Quiz Results</a>
+                                    <a class="dropdown-item" href="{{route('course_based.result')}}">Coursed Based Quiz Results</a>
                                     <a class="dropdown-item" href="#">Free Quiz Results</a>
                                     <a class="dropdown-item" href="#">Individual Quiz Results</a>
 

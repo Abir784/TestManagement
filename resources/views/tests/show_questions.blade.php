@@ -18,6 +18,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Questions</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,6 +27,7 @@
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{!! $question->rel_to_question->title !!}</td>
+                                <td><a href="{{route('independent_test_question.delete',$question->id)}}" class="btn btn-outline-danger btn-rounded">Delete</a></td>
                             </tr>
                             @empty
                             <tr>

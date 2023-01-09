@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('type');
             $table->text('title');
             $table->integer('marks')->default(0);
-            $table->boolean('has_multiple')->nullable();
+            $table->integer('total_marks')->default(0);
             $table->text('answer_explaination')->nullable();
             $table->timestamps();
         });

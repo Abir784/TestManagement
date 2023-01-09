@@ -220,4 +220,9 @@ class IndividualTestController extends Controller
         return back();
 
     }
+
+    function QuestionDelete($id){
+        IndividualTestQuestion::find($id)->delete();
+        return back();
+    }
 }

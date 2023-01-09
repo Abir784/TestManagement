@@ -59,12 +59,13 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($data['full_marks']!=0)
+                                    {{-- @if ($data['full_marks']!=0)
                                       {{$data['full_marks']}}
 
                                     @else
                                     {{$data['option_full_mark']}}
-                                    @endif
+                                    @endif --}}
+                                    {{$data['total_marks']}}
                                 </td>
                                 <td>
                                     <a href="{{route('question.delete', $data['question_id'])}}" class="btn btn-danger"> Delete</a>

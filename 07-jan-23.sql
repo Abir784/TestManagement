@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 09, 2022 at 07:04 AM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Jan 07, 2023 at 05:09 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,20 +29,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `batches` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `batch_name` varchar(255) NOT NULL,
   `course_id` int(11) NOT NULL,
-  `start_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `start_date` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `batch_name` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `batches`
 --
 
-INSERT INTO `batches` (`id`, `course_id`, `start_date`, `created_at`, `updated_at`, `batch_name`) VALUES
-(1, 1, '2022-11-15 18:00:00', '2022-11-03 04:58:47', '2022-11-03 04:58:47', '1'),
-(2, 2, '2022-12-08 18:00:00', '2022-11-03 04:58:55', '2022-11-03 04:58:55', '2');
+INSERT INTO `batches` (`id`, `batch_name`, `course_id`, `start_date`, `created_at`, `updated_at`) VALUES
+(1, '1', 1, '2022-12-15 18:00:00', '2022-12-16 16:44:19', '2022-12-16 16:44:19'),
+(2, '2', 1, '2022-12-30 18:00:00', '2022-12-21 14:54:42', '2022-12-21 14:54:42'),
+(3, '1', 2, '2023-02-10 18:00:00', '2023-01-06 15:50:58', '2023-01-06 15:50:58');
 
 -- --------------------------------------------------------
 
@@ -52,29 +53,29 @@ INSERT INTO `batches` (`id`, `course_id`, `start_date`, `created_at`, `updated_a
 
 CREATE TABLE `countries` (
   `id` mediumint(8) UNSIGNED NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `iso3` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `numeric_code` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `iso2` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phonecode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `capital` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `currency_symbol` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tld` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `native` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `region` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `subregion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `timezones` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `translations` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(100) NOT NULL,
+  `iso3` char(3) DEFAULT NULL,
+  `numeric_code` char(3) DEFAULT NULL,
+  `iso2` char(2) DEFAULT NULL,
+  `phonecode` varchar(255) DEFAULT NULL,
+  `capital` varchar(255) DEFAULT NULL,
+  `currency` varchar(255) DEFAULT NULL,
+  `currency_name` varchar(255) DEFAULT NULL,
+  `currency_symbol` varchar(255) DEFAULT NULL,
+  `tld` varchar(255) DEFAULT NULL,
+  `native` varchar(255) DEFAULT NULL,
+  `region` varchar(255) DEFAULT NULL,
+  `subregion` varchar(255) DEFAULT NULL,
+  `timezones` text DEFAULT NULL,
+  `translations` text DEFAULT NULL,
   `latitude` decimal(10,8) DEFAULT NULL,
   `longitude` decimal(11,8) DEFAULT NULL,
-  `emoji` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `emojiU` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `emoji` varchar(191) DEFAULT NULL,
+  `emojiU` varchar(191) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `flag` tinyint(1) NOT NULL DEFAULT 1,
-  `wikiDataId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Rapid API GeoDB Cities'
+  `wikiDataId` varchar(255) DEFAULT NULL COMMENT 'Rapid API GeoDB Cities'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -339,15 +340,65 @@ INSERT INTO `countries` (`id`, `name`, `iso3`, `numeric_code`, `iso2`, `phonecod
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `coursed_based_assignments`
+--
+
+CREATE TABLE `coursed_based_assignments` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `batch_id` int(11) NOT NULL,
+  `file_name` varchar(11) DEFAULT NULL,
+  `title` varchar(1100) DEFAULT NULL,
+  `full_marks` int(11) NOT NULL,
+  `deadline` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coursed_based_assignments`
+--
+
+INSERT INTO `coursed_based_assignments` (`id`, `course_id`, `batch_id`, `file_name`, `title`, `full_marks`, `deadline`, `created_at`, `updated_at`) VALUES
+(5, 1, 1, '5.pdf', 'Francesca Goff', 60, '2023-01-05', '2023-01-04 15:21:07', '2023-01-04 15:21:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coursed_based_descriptive_answers`
+--
+
+CREATE TABLE `coursed_based_descriptive_answers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  `mark` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coursed_based_descriptive_answers`
+--
+
+INSERT INTO `coursed_based_descriptive_answers` (`id`, `student_id`, `quiz_id`, `question_id`, `answer`, `mark`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 2, 'alsdkfjasldkjfasl.dfjaslfja;lsdfkalskdjcsldkcja;sklfj;alsdklsdjfk;sljdfmlsjdfmamsnmdfc/kjm/jlaxakjx,z;lkajxz;laksjla.,jz;lasj zlak sxzlkajxn zfalkjfnx kasjdlkfxskljfxza;lsjxlkefioaldkjcl;ksdjxhjlkahf;klahskj hads kf', 3, 1, NULL, '2023-01-03 18:18:40');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `courses`
 --
 
 CREATE TABLE `courses` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `course_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `course_code` varchar(255) NOT NULL,
   `number_of_exams` int(11) NOT NULL DEFAULT 0,
-  `comment` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -357,9 +408,106 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`id`, `name`, `course_code`, `number_of_exams`, `comment`, `created_at`, `updated_at`) VALUES
-(1, 'Digital Logic Design', 'CSE360', 0, 'it is logic design course', '2022-11-03 03:55:21', '2022-11-03 03:55:21'),
-(2, 'Fundamentals of physics', 'PHY111', 0, 'it is a fundamental physics course', '2022-11-03 03:56:08', '2022-11-03 03:56:08'),
-(3, 'Discrete Mathematics', 'CSE230', 0, 'This is a math course', '2022-11-03 04:47:18', '2022-11-03 04:47:18');
+(1, 'Digital Logic Design', 'CSE260', 0, 'NO comments', '2022-12-16 16:44:06', '2022-12-16 16:44:06'),
+(2, 'Fundamentals of Physics', 'PHY111', 0, 'N?A', '2023-01-06 15:50:15', '2023-01-06 15:50:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course_based_assignment_submissions`
+--
+
+CREATE TABLE `course_based_assignment_submissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `assignment_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `mark` int(11) NOT NULL DEFAULT 0,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_based_assignment_submissions`
+--
+
+INSERT INTO `course_based_assignment_submissions` (`id`, `assignment_id`, `student_id`, `file_name`, `mark`, `status`, `created_at`, `updated_at`) VALUES
+(1, 5, 1, '1-1.pdf', 20, 1, '2023-01-05 16:23:28', '2023-01-06 15:47:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course_based_quiz_questions`
+--
+
+CREATE TABLE `course_based_quiz_questions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `quiz_id` varchar(255) NOT NULL,
+  `question_id` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_based_quiz_questions`
+--
+
+INSERT INTO `course_based_quiz_questions` (`id`, `quiz_id`, `question_id`, `created_at`, `updated_at`) VALUES
+(1, '1', '1', '2022-12-21 15:17:43', '2022-12-21 15:17:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course_based_tests`
+--
+
+CREATE TABLE `course_based_tests` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `batch_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `introduction_text` varchar(255) NOT NULL,
+  `passing_comments` varchar(255) NOT NULL,
+  `failing_comments` varchar(255) NOT NULL,
+  `pass_marks` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_date` date NOT NULL,
+  `end_time` time NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_based_tests`
+--
+
+INSERT INTO `course_based_tests` (`id`, `name`, `course_id`, `batch_id`, `time`, `introduction_text`, `passing_comments`, `failing_comments`, `pass_marks`, `start_date`, `start_time`, `end_date`, `end_time`, `created_at`, `updated_at`) VALUES
+(1, 'Test 1', 1, 1, 2, 'This a great text', 'You have passed', 'You have failed', 20, '2023-01-03', '18:50:00', '2023-01-07', '01:59:00', '2023-01-07 16:02:53', '2023-01-07 16:02:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `course_based_test_results`
+--
+
+CREATE TABLE `course_based_test_results` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `total_marks` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_based_test_results`
+--
+
+INSERT INTO `course_based_test_results` (`id`, `student_id`, `quiz_id`, `total_marks`, `created_at`, `updated_at`) VALUES
+(4, 1, 1, 5, '2022-12-21 15:26:15', '2022-12-21 15:26:15');
 
 -- --------------------------------------------------------
 
@@ -369,13 +517,211 @@ INSERT INTO `courses` (`id`, `name`, `course_code`, `number_of_exams`, `comment`
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `independent_descriptive_answers`
+--
+
+CREATE TABLE `independent_descriptive_answers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  `mark` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `independent_descriptive_answers`
+--
+
+INSERT INTO `independent_descriptive_answers` (`id`, `student_id`, `quiz_id`, `question_id`, `answer`, `mark`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 2, 'I am Elobrating my answer', 4, 1, '2023-01-03 12:53:31', '2023-01-03 18:31:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `independent_tests`
+--
+
+CREATE TABLE `independent_tests` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `introduction_text` text NOT NULL,
+  `pass_marks` int(11) NOT NULL,
+  `time` int(11) NOT NULL DEFAULT 0,
+  `passing_comments` text NOT NULL,
+  `failing_comments` text NOT NULL,
+  `show_scores` tinyint(1) DEFAULT NULL,
+  `status` varchar(255) NOT NULL,
+  `start_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_date` date NOT NULL,
+  `end_time` time NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `independent_tests`
+--
+
+INSERT INTO `independent_tests` (`id`, `name`, `introduction_text`, `pass_marks`, `time`, `passing_comments`, `failing_comments`, `show_scores`, `status`, `start_date`, `start_time`, `end_date`, `end_time`, `created_at`, `updated_at`) VALUES
+(3, 'First Edited Exam', 'This is a exam based on Bangla Subject', 15, 2, 'You have passed this exam very fluently', 'you have miserably failed this exam', NULL, '0', '2023-01-08', '18:58:00', '2023-01-07', '21:11:00', '2023-01-07 15:53:21', '2023-01-07 15:53:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `independent_test_questions`
+--
+
+CREATE TABLE `independent_test_questions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `quiz_id` varchar(255) NOT NULL,
+  `question_id` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `independent_test_questions`
+--
+
+INSERT INTO `independent_test_questions` (`id`, `quiz_id`, `question_id`, `created_at`, `updated_at`) VALUES
+(4, '3', '1', '2023-01-03 12:57:54', '2023-01-03 12:57:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `independent_test_results`
+--
+
+CREATE TABLE `independent_test_results` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `total_marks` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `independent_test_results`
+--
+
+INSERT INTO `independent_test_results` (`id`, `student_id`, `quiz_id`, `total_marks`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 0, '2023-01-03 12:51:57', '2023-01-03 12:51:57'),
+(2, 1, 1, 5, '2023-01-03 12:53:31', '2023-01-03 12:53:31'),
+(3, 1, 3, 0, '2023-01-07 15:09:46', '2023-01-07 15:09:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `individual_tests`
+--
+
+CREATE TABLE `individual_tests` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `introduction_text` varchar(255) NOT NULL,
+  `passing_comments` varchar(255) NOT NULL,
+  `failing_comments` varchar(255) NOT NULL,
+  `pass_marks` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_date` date NOT NULL,
+  `end_time` time NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `individual_tests`
+--
+
+INSERT INTO `individual_tests` (`id`, `name`, `time`, `introduction_text`, `passing_comments`, `failing_comments`, `pass_marks`, `start_date`, `start_time`, `end_date`, `end_time`, `created_at`, `updated_at`) VALUES
+(2, 'Demo 1', 2, 'iesjfasjdf', 'asdfsdfs', 'sdfasf', 10, '2023-01-08', '11:39:00', '2023-01-07', '21:53:00', '2023-01-07 15:53:35', '2023-01-07 15:53:35');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `individual_test_descriptive_answers`
+--
+
+CREATE TABLE `individual_test_descriptive_answers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `answer` text DEFAULT NULL,
+  `mark` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `individual_test_questions`
+--
+
+CREATE TABLE `individual_test_questions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `quiz_id` varchar(255) NOT NULL,
+  `question_id` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `individual_test_students`
+--
+
+CREATE TABLE `individual_test_students` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invidual_test_results`
+--
+
+CREATE TABLE `invidual_test_results` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `total_marks` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `invidual_test_results`
+--
+
+INSERT INTO `invidual_test_results` (`id`, `student_id`, `quiz_id`, `total_marks`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 0, '2023-01-07 15:23:12', '2023-01-07 15:23:12');
 
 -- --------------------------------------------------------
 
@@ -385,7 +731,7 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -394,13 +740,32 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(13, '2014_10_12_000000_create_users_table', 1),
-(14, '2014_10_12_100000_create_password_resets_table', 1),
-(15, '2019_08_19_000000_create_failed_jobs_table', 1),
-(16, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(17, '2022_10_25_103935_create_students_table', 1),
-(18, '2022_10_28_140831_create_courses_table', 1),
-(19, '2022_11_03_095857_create_batches_table', 2);
+(1, '2014_10_12_000000_create_users_table', 1),
+(2, '2014_10_12_100000_create_password_resets_table', 1),
+(3, '2019_08_19_000000_create_failed_jobs_table', 1),
+(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(5, '2022_10_25_103935_create_students_table', 1),
+(6, '2022_10_28_140831_create_courses_table', 1),
+(7, '2022_11_03_095857_create_batches_table', 1),
+(8, '2022_11_09_171700_create_subjects_table', 1),
+(9, '2022_11_09_171919_create_question_modules_table', 1),
+(10, '2022_11_10_124339_create_questions_table', 1),
+(11, '2022_11_10_124913_create_question_options_table', 1),
+(12, '2022_11_18_160005_create_independent_tests_table', 1),
+(13, '2022_11_21_161143_create_independent_test_questions_table', 1),
+(14, '2022_12_08_011104_create_independent_descriptive_answers_table', 1),
+(15, '2022_12_08_122004_create_independent_test_results_table', 1),
+(16, '2022_12_10_180122_create_course_based_tests_table', 1),
+(17, '2022_12_10_221148_create_course_based_quiz_questions_table', 1),
+(18, '2022_12_12_001957_create_course_based_test_results_table', 1),
+(19, '2022_12_12_002339_create_coursed_based_descriptive_answers_table', 1),
+(20, '2022_12_13_000946_create_coursed_based_assignments_table', 1),
+(21, '2022_12_14_145230_create_individual_tests_table', 1),
+(22, '2022_12_14_145422_create_individual_test_students_table', 1),
+(23, '2022_12_14_145532_create_invidual_test_results_table', 1),
+(24, '2022_12_14_145647_create_individual_test_questions_table', 1),
+(25, '2022_12_14_145756_create_individual_test_descriptive_answers_table', 1),
+(26, '2023_01_05_210426_create_course_based_assignment_submissions_table', 2);
 
 -- --------------------------------------------------------
 
@@ -409,8 +774,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -422,16 +787,97 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
   `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+CREATE TABLE `questions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `module_id` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `title` text NOT NULL,
+  `marks` int(11) NOT NULL DEFAULT 0,
+  `has_multiple` tinyint(1) DEFAULT NULL,
+  `answer_explaination` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`id`, `module_id`, `type`, `title`, `marks`, `has_multiple`, `answer_explaination`, `created_at`, `updated_at`) VALUES
+(1, 1, 'MCQ', 'Random question?', 5, NULL, NULL, '2022-12-16 16:53:06', NULL),
+(2, 1, 'DESC', 'What is bio-technology? Elobrate your asnwer.', 5, NULL, NULL, '2022-12-21 19:15:00', '2022-12-21 19:15:00'),
+(3, 1, 'MATCH', '<figure class=\"table\"><table><tbody><tr><td><ol><li>564321211</li><li>32.13213121</li><li>321321</li></ol></td><td><ol><li>65343543</li><li>alsdlaskd</li><li>;alsdjlsdkjf</li></ol></td></tr></tbody></table></figure>', 0, NULL, NULL, '2023-01-06 15:58:24', NULL),
+(4, 4, 'MCQ', 'Consectetur occaecat', 5, NULL, NULL, '2023-01-06 16:04:01', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `question_modules`
+--
+
+CREATE TABLE `question_modules` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `desp` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `question_modules`
+--
+
+INSERT INTO `question_modules` (`id`, `subject_id`, `name`, `desp`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Module-1', NULL, '2022-12-16 16:52:03', '2022-12-16 16:52:03'),
+(2, 1, 'Modul-2', NULL, '2023-01-06 15:54:58', '2023-01-06 15:54:58'),
+(3, 1, 'Module-3', NULL, '2023-01-06 15:54:58', '2023-01-06 15:54:58'),
+(4, 1, 'Module-4', NULL, '2023-01-06 15:54:58', '2023-01-06 15:54:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `question_options`
+--
+
+CREATE TABLE `question_options` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `option_title` text NOT NULL,
+  `right_answer` tinyint(1) NOT NULL,
+  `marks` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `question_options`
+--
+
+INSERT INTO `question_options` (`id`, `question_id`, `option_title`, `right_answer`, `marks`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Option1', 1, NULL, '2022-12-16 16:53:06', '2022-12-16 16:53:06'),
+(2, 1, 'Option2', 0, NULL, '2022-12-16 16:53:06', '2022-12-16 16:53:06'),
+(3, 3, '3', 1, 1, '2023-01-06 15:58:24', '2023-01-06 15:58:24'),
+(4, 3, '1', 1, 2, '2023-01-06 15:58:24', '2023-01-06 15:58:24'),
+(5, 3, '2', 1, 2, '2023-01-06 15:58:24', '2023-01-06 15:58:24'),
+(6, 4, 'Officia aspernatur u', 0, NULL, '2023-01-06 16:04:01', '2023-01-06 16:04:01');
 
 -- --------------------------------------------------------
 
@@ -442,24 +888,45 @@ CREATE TABLE `personal_access_tokens` (
 CREATE TABLE `students` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `registration_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `course_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `batch_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `country` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `registration_no` varchar(255) NOT NULL,
+  `course_id` varchar(255) DEFAULT NULL,
+  `batch_id` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `phone_no` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `phone_no` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `user_id`, `name`, `email`, `registration_no`, `course_id`, `batch_id`, `country`, `created_at`, `updated_at`, `phone_no`) VALUES
-(1, 5, 'Abir Hossain', 'abirwebcodee@gmail.com', '1234685321', '1', '1', 'India', '2022-11-03 09:48:02', '2022-11-03 09:48:02', '0155246815'),
-(2, 6, 'Sakib Al hasan', 'sakib@allrounder.com', '75757575', '2', '2', 'Bangladesh', '2022-11-03 10:03:54', '2022-11-03 10:03:54', '0175757575');
+INSERT INTO `students` (`id`, `user_id`, `name`, `email`, `registration_no`, `course_id`, `batch_id`, `country`, `phone_no`, `created_at`, `updated_at`) VALUES
+(1, 3, 'MD ABIR HOSSAIN ABIR', 'abirhossain@gmail.com', '22101657', '1', '1', 'Bangladesh', '563215321', '2022-12-16 16:49:52', '2022-12-16 16:49:52'),
+(2, 4, 'Sabbir Rahman', 'sabbir@rahman.com', '1531231', '2', '3', 'Bangladesh', '1532132153212', '2023-01-06 15:53:23', '2023-01-06 15:53:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subjects`
+--
+
+CREATE TABLE `subjects` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `desp` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `subjects`
+--
+
+INSERT INTO `subjects` (`id`, `name`, `desp`, `created_at`, `updated_at`) VALUES
+(1, 'Subject-1', 'N/A', '2022-12-16 16:51:44', '2022-12-16 16:51:44');
 
 -- --------------------------------------------------------
 
@@ -469,12 +936,12 @@ INSERT INTO `students` (`id`, `user_id`, `name`, `email`, `registration_no`, `co
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `role` varchar(255) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -484,10 +951,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `role`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', '1', NULL, '$2a$12$flYyB8CBf68aa3r67qhKfuv3A09rKJFsTnAYXVJvye8sxjal5.RMq', NULL, NULL, NULL),
-(3, 'Student', 'student@gmail.com', '2', NULL, '$2a$12$flYyB8CBf68aa3r67qhKfuv3A09rKJFsTnAYXVJvye8sxjal5.RMq', NULL, NULL, NULL),
-(5, 'Abir Hossain', 'abirwebcodee@gmail.com', '2', NULL, '$2y$10$KbNU9LPh2R1Z3PmSTSMMWurY7hmxQGkglQ9M9QQf1H6DyrjvGyfL.', NULL, '2022-11-03 09:48:02', '2022-11-03 09:48:02'),
-(6, 'Sakib Al hasan', 'sakib@allrounder.com', '2', NULL, '$2y$10$LwMpa45NHQB3YKz500s89uBIyt9VXpBBv8uKPvuyFnOqrfGIdBcHK', NULL, '2022-11-03 10:03:54', '2022-11-03 10:03:54');
+(1, 'admin', 'admin@gmail.com', '1', NULL, '$2a$12$eI/7sNDVlSfm4AaCRASF8epy.x.exFz7CFBv9gpWPBJxZOoERnDwm', NULL, NULL, NULL),
+(3, 'MD ABIR HOSSAIN ABIR', 'abirhossainofficial784@gmail.com', '2', NULL, '$2y$10$ELG5R68Q2C75gza7qPCjSu.gpxRN1az1Vwb445FkLMItVAFqD1RcS', NULL, '2022-12-16 16:49:52', '2022-12-16 16:49:52'),
+(4, 'Sabbir Rahman', 'sabbir@rahman.com', '2', NULL, '$2y$10$s7rvu.voW8bt.uGmAJ8vCeEI1gk4A5EvpKl/HQtL4RwbSx.Jpvgiq', NULL, '2023-01-06 15:53:23', '2023-01-06 15:53:23');
 
 --
 -- Indexes for dumped tables
@@ -506,9 +972,45 @@ ALTER TABLE `countries`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `coursed_based_assignments`
+--
+ALTER TABLE `coursed_based_assignments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `coursed_based_descriptive_answers`
+--
+ALTER TABLE `coursed_based_descriptive_answers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `courses`
 --
 ALTER TABLE `courses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `course_based_assignment_submissions`
+--
+ALTER TABLE `course_based_assignment_submissions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `course_based_quiz_questions`
+--
+ALTER TABLE `course_based_quiz_questions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `course_based_tests`
+--
+ALTER TABLE `course_based_tests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `course_based_test_results`
+--
+ALTER TABLE `course_based_test_results`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -517,6 +1019,60 @@ ALTER TABLE `courses`
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indexes for table `independent_descriptive_answers`
+--
+ALTER TABLE `independent_descriptive_answers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `independent_tests`
+--
+ALTER TABLE `independent_tests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `independent_test_questions`
+--
+ALTER TABLE `independent_test_questions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `independent_test_results`
+--
+ALTER TABLE `independent_test_results`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `individual_tests`
+--
+ALTER TABLE `individual_tests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `individual_test_descriptive_answers`
+--
+ALTER TABLE `individual_test_descriptive_answers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `individual_test_questions`
+--
+ALTER TABLE `individual_test_questions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `individual_test_students`
+--
+ALTER TABLE `individual_test_students`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invidual_test_results`
+--
+ALTER TABLE `invidual_test_results`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -539,9 +1095,33 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Indexes for table `questions`
+--
+ALTER TABLE `questions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `question_modules`
+--
+ALTER TABLE `question_modules`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `question_options`
+--
+ALTER TABLE `question_options`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `students`
 --
 ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `subjects`
+--
+ALTER TABLE `subjects`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -568,10 +1148,46 @@ ALTER TABLE `countries`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
 
 --
+-- AUTO_INCREMENT for table `coursed_based_assignments`
+--
+ALTER TABLE `coursed_based_assignments`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `coursed_based_descriptive_answers`
+--
+ALTER TABLE `coursed_based_descriptive_answers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `course_based_assignment_submissions`
+--
+ALTER TABLE `course_based_assignment_submissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `course_based_quiz_questions`
+--
+ALTER TABLE `course_based_quiz_questions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `course_based_tests`
+--
+ALTER TABLE `course_based_tests`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `course_based_test_results`
+--
+ALTER TABLE `course_based_test_results`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -580,10 +1196,64 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `independent_descriptive_answers`
+--
+ALTER TABLE `independent_descriptive_answers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `independent_tests`
+--
+ALTER TABLE `independent_tests`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `independent_test_questions`
+--
+ALTER TABLE `independent_test_questions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `independent_test_results`
+--
+ALTER TABLE `independent_test_results`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `individual_tests`
+--
+ALTER TABLE `individual_tests`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `individual_test_descriptive_answers`
+--
+ALTER TABLE `individual_test_descriptive_answers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `individual_test_questions`
+--
+ALTER TABLE `individual_test_questions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `individual_test_students`
+--
+ALTER TABLE `individual_test_students`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `invidual_test_results`
+--
+ALTER TABLE `invidual_test_results`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -592,16 +1262,40 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `questions`
+--
+ALTER TABLE `questions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `question_modules`
+--
+ALTER TABLE `question_modules`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `question_options`
+--
+ALTER TABLE `question_options`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

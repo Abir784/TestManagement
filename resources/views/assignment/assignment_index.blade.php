@@ -28,7 +28,7 @@
                             <td>{{$answer->rel_to_student->batch_name->batch_name}}</td>
                             <td>{{$answer->rel_to_assignment->title}}</td>
                             <td>{{$answer->rel_to_assignment->full_marks}}</td>
-                            <td><a href="{{route('assignment.marking',$answer->id)}}" class="btn btn-primary">Examine</a></td>
+                            <td><a href="{{route('assignment.marking',$answer->id)}}" class="btn btn-outline-primary btn-rounded">Examine</a></td>
 
                         </tr>
 

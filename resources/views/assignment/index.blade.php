@@ -16,7 +16,7 @@
                             <th>Batch Name</th>
                             <th>Deadline</th>
                             <th>Full Marks</th>
-                            <th>Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -28,9 +28,7 @@
                             <td>{{ $test->rel_to_batch->batch_name}}</td>
                             <td>{{  Carbon\Carbon::parse($test->deadline)->format('d-M-y')}}</td>
                             <td>{{ $test->full_marks}}</td>
-                            <td>
-                                    <a href="" class="btn btn-danger btn-rounded">Delete</a>
-                            </td>
+
 
 
 

@@ -7,6 +7,7 @@ use App\Models\CourseBasedQuizQuestion;
 use App\Models\CourseBasedTest;
 use App\Models\CourseBasedTestResult;
 use App\Models\CoursedBasedDescriptiveAnswer;
+use App\Models\IndependentTestQuestions;
 use App\Models\Question;
 use App\Models\Student;
 use App\Models\subject;
@@ -181,5 +182,9 @@ class StudentCourseBasedTestController extends Controller
         CourseBasedTest::find($id)->delete();
         return back();
 
+    }
+    function QuestionDelete($id){
+        CourseBasedQuizQuestion::find($id)->delete();
+        return back();
     }
 }

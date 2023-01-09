@@ -30,7 +30,7 @@
                             <td>{{$answer->rel_to_quiz->name}}</td>
                             <td>{{$answer->rel_to_question->title}}</td>
                             <td>{{$answer->rel_to_question->marks}}</td>
-                            <td><a href="{{route('course_based.marking',$answer->id)}}" class="btn btn-primary mr-3">Examine</a></td>
+                            <td><a href="{{route('course_based.marking',$answer->id)}}" class="btn btn-outline-primary mr-3">Examine</a></td>
                         </tr>
 
                         @empty

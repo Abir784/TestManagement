@@ -51,11 +51,11 @@ class StudentQuizController extends Controller
              }elseif( !Carbon::parse($quiz->start_date)->isToday() && Carbon::parse($quiz->end_date)->isToday()){
                 if($quiz->end_time > $time){
                     $independent_quiz[]=$quiz;
-
                 }
              }else{
                 $independent_quiz[]=$quiz;
              }
+             
           }
 
 

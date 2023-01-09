@@ -19,8 +19,12 @@ use function GuzzleHttp\Promise\all;
 class QuizController extends Controller
 {
     function QuizIndex(){
+        $independent_test=IndependentTest::all();
 
-        return view('tests.index');
+        return view('tests.index',
+    [
+        'independent_test'=>$independent_test,
+    ]);
      }
 
      function QuizPost(Request $request){
@@ -224,7 +228,7 @@ class QuizController extends Controller
 
     }
     function update(Request $request){
-    
+
         IndependentTest::find($request->id)->update([
             'name'=>$request->name,
             'introduction_text'=>$request->introduction_text,
@@ -243,6 +247,11 @@ class QuizController extends Controller
 
         return redirect(route('quiz.index'))->with('update','Successfull');
 
+    }
+
+    function QuestionDelete($id){
+        IndependentTestQuestions::find($id)->delete();
+        return back();
     }
 
 }
