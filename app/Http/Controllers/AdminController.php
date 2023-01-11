@@ -12,6 +12,9 @@ use App\Models\User;
 use GrahamCampbell\ResultType\Success;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentSampleExport;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use PDF;
+
 class AdminController extends Controller
 {
     function student_index(){
@@ -80,7 +83,7 @@ class AdminController extends Controller
 
             'course_id'=>'required',
             'batch_id'=>'required',
-            'student_file'=>'required|mimes:csv',
+            'student_file'=>'required|file|mimes:csv',
 
         ],[
             'course_id.required'=>'Course need to be selected',
@@ -98,4 +101,8 @@ class AdminController extends Controller
     function sample_export(){
         return Excel::download(new StudentSampleExport, 'sample.xlsx');
     }
+
+
+
+
 }

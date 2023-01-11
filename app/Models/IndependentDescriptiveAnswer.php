@@ -16,7 +16,7 @@ class IndependentDescriptiveAnswer extends Model
         return $this->belongsTo(Question::class, 'question_id', 'id');
     }
     public function rel_to_quiz(){
-        return $this->belongsTo(IndividualTest::class, 'quiz_id', 'id');
+        return $this->belongsTo(IndependentTest::class, 'quiz_id', 'id');
     }
 
 }

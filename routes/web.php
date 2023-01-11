@@ -74,7 +74,7 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::get('/AddQuiz',[QuizController::class,'QuizIndex'])->name('quiz.index');
   Route::post('/QuizPost',[QuizController::class,'QuizPost'])->name('quiz.post');
   Route::get('/AddIndependentTest/Questions/{id}',[QuizController::class,'IndependentQuestionIndex'])->name('quiz.indipendent.question.index');
-  Route::post('IndependentQuizQuestionPost',[QuizController::class,'InpendentQuestionPost'])->name('independent.quiz.question.post');
+  Route::post('/IndependentQuizQuestionPost',[QuizController::class,'IndependentQuestionPost'])->name('independent.quiz.question.post');
   Route::post('IndependentSpecificQuizQuestionPost',[QuizController::class,'InpendentSpecificQuestionPost'])->name('independent.specific.quiz.question.post');
   Route::get('/InpendentQuestionShow/{quiz_id}',[QuizController::class,'IndependentQuestionShow'])->name('quiz.indipendent.question.show');
   Route::get('/StatusChange/{quiz_id}',[QuizController::class,'StatusChange'])->name('quiz.statuschange');
@@ -155,10 +155,14 @@ Route::group(['middleware'=>['auth'],'prefix'=>'student',],function(){
     Route::post('/assignment/submission',[StudentController::class,'AssignmentPost'])->name('assignment.student.post');
     //Course Based Exam Result
     Route::get('/CourseBasedQuizResult/index',[StudentController::class,'CourseBasedQuizResultIndex'])->name('course_based.result');
-    
+    Route::get('/independent_quiz_result/index',[StudentController::class,'IndependentResultIndex'])->name('independent_quiz_result.result');
+    Route::get('individual_quiz_result/index',[StudentController::class,'IndividualQuizResultIndex'])->name('individual_quiz_result.result');
+    Route::get('generate/marksheet', [StudentCourseBasedTestController::class, 'generateMarksheet']);
+    Route::get('generate/marksheet_2', [StudentQuizController::class, 'generateMarksheet']);
 
 
 });
+
 
 
 

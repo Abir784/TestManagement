@@ -10,8 +10,8 @@
                     <div class="mb-3">
                         @if (session('success'))
                           <div class="alert alert-success">
-                              {{session('success')[1]}}
-                             <br>Your tentative mark is {{session('success')[0]}}.
+
+                             <br>Your tentative mark is {{session('success')}}.
                           </div>
 
                         @endif

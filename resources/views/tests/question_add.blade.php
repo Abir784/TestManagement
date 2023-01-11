@@ -50,7 +50,7 @@
                         <h5 class="card-title">Add Questions(Random)</h5>
                         <p class="card-text">
 
-                            <form action="{{url('IndependentQuizQuestionPost')}}" method="POST" enctype="multipart/form-data" >
+                            <form action="{{route('independent.quiz.question.post')}}" method="POST" enctype="multipart/form-data" >
                               @csrf
                               <div class="mb-3 form-group">
                                 <input type="hidden" name="quiz_id" value="{{$id}}">

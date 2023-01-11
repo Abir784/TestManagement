@@ -63,7 +63,7 @@ class QuizController extends Controller
         echo $send_to_cat;
 
     }
-    function InpendentQuestionPost(Request $request){
+    function IndependentQuestionPost(Request $request){
 
         $questions=Question::where('module_id',$request->module_id)->get();
 

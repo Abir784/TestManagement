@@ -573,8 +573,8 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Results</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{route('course_based.result')}}">Coursed Based Quiz Results</a>
-                                    <a class="dropdown-item" href="#">Free Quiz Results</a>
-                                    <a class="dropdown-item" href="#">Individual Quiz Results</a>
+                                    <a class="dropdown-item" href="{{route('independent_quiz_result.result')}}">Free Quiz Results</a>
+                                    <a class="dropdown-item" href="{{route('individual_quiz_result.result')}}">Individual Quiz Results</a>
 
                                 </div>
                             </li>
@@ -587,7 +587,6 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item active" href="{{route('course.index')}}">Add Courses</a>
                                     <a class="dropdown-item active" href="{{route('course.show')}}">Show Courses</a>
-
                             </li>
                             <li class="nav-item dropdown active">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Batches</a>

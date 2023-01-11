@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 use PHPUnit\Framework\Constraint\Count;
+use PDF;
 
 class StudentQuizController extends Controller
 {
@@ -55,7 +56,7 @@ class StudentQuizController extends Controller
              }else{
                 $independent_quiz[]=$quiz;
              }
-             
+
           }
 
 
@@ -125,52 +126,46 @@ class StudentQuizController extends Controller
         'id'=>$id,
         'time'=>$quiz->time,
     ]);
-    }
+}
     function ExamPost(Request $request){
         $input=$request->all();
         $marks=0;
         foreach($request->question_id as $question){
             $ques=Question::where('id',$question)->first();
             if($ques->type == "MCQ"){
-
                 $options=QuestionOptions::where('question_id',$ques->id)->where('right_answer',1)->get();
-
                 if($ques->marks != 0){
                     if(array_key_exists('answer__'.$ques->id, $input)) {
                         if(count($input['answer__'.$ques->id])>count($options)){
                             $marks+=0;
                         }else{
                             foreach($options as $key=>$option){
-                                if($option->id != $input['answer__'.$ques->id][$key]){
-                                    $marks+=0;
-                                }else{
-                                    $marks+=$ques->marks;
+                                if($option->id == $input['answer__'.$ques->id][$key]){
+                                    $marks+=($ques->marks);
                                 }
                             }
                         }
                     }
 
-                }else{
-                         $options=QuestionOptions::where('question_id',$ques->id)->where('right_answer',1)->get();
-
-                        if(array_key_exists('answare_'.$ques->id, $input)) {
+                }
+                else{
+                $options=QuestionOptions::where('question_id',$ques->id)->where('right_answer',1)->get();
+                        if(array_key_exists('answer__'.$ques->id, $input)) {
                             if(count($input['answer__'.$ques->id])>count($options)){
                                 $marks+=0;
                             }else{
                                 foreach($options as $key=>$option){
                                     foreach($input['answer__'.$ques->id] as $answer){
                                         if($option->id == $answer){
-                                            $marks+=$option->marks;
+                                            $marks+=($option->marks);
 
-                                        }else{
-                                            $marks+=0;
                                         }
-
                                     }
                                 }
                             }
                         }
                 }
+
             }elseif($ques->type == "MATCH"){
                     $options=QuestionOptions::where('question_id',$ques->id)->get();
                     if($ques->marks != 0){
@@ -178,7 +173,6 @@ class StudentQuizController extends Controller
                         foreach($options as $key=>$option){
                             if($option->option_title != $input['answer__'.$ques->id][$key]){
                                 $flag=False;
-                                break;
                             }
                         }
                         if($flag==True){
@@ -216,40 +210,45 @@ class StudentQuizController extends Controller
 
 
             }else{
-                 if($request->quiz_type ==1){
-                    $student=Student::where('user_id',Auth::id())->first();
-                    IndependentDescriptiveAnswer::create([
-                        'student_id'=>$student->id,
-                        'quiz_id'=>$input['quiz_id'],
-                        'question_id'=>$ques->id,
-                        'answer'=>$input['answer__'.$ques->id],
-                        'mark'=>0,
-                        'created_at'=>Carbon::now(),
-                    ]);
 
-                 }elseif($request->quiz_type ==2){
-                    $student=Student::where('user_id',Auth::id())->first();
-                    CoursedBasedDescriptiveAnswer::create([
-                        'student_id'=>$student->id,
-                        'quiz_id'=>$input['quiz_id'],
-                        'question_id'=>$ques->id,
-                        'answer'=>$input['answer__'.$ques->id],
-                        'mark'=>0,
-                        'created_at'=>Carbon::now(),
-                    ]);
+                if( $input['answer__'.$ques->id] != null){
 
-                 }else{
-                    $student=Student::where('user_id',Auth::id())->first();
-                    IndividualTestDescriptiveAnswer::create([
-                        'student_id'=>$student->id,
-                        'quiz_id'=>$input['quiz_id'],
-                        'question_id'=>$ques->id,
-                        'answer'=>$input['answer__'.$ques->id],
-                        'mark'=>0,
-                        'created_at'=>Carbon::now(),
-                    ]);
+                    if($request->quiz_type ==1){
+                        $student=Student::where('user_id',Auth::id())->first();
+                        IndependentDescriptiveAnswer::create([
+                            'student_id'=>$student->id,
+                            'quiz_id'=>$input['quiz_id'],
+                            'question_id'=>$ques->id,
+                            'answer'=>$input['answer__'.$ques->id],
+                            'mark'=>0,
+                            'created_at'=>Carbon::now(),
+                        ]);
 
-                 }
+                     }elseif($request->quiz_type ==2){
+                        $student=Student::where('user_id',Auth::id())->first();
+                        CoursedBasedDescriptiveAnswer::create([
+                            'student_id'=>$student->id,
+                            'quiz_id'=>$input['quiz_id'],
+                            'question_id'=>$ques->id,
+                            'answer'=>$input['answer__'.$ques->id],
+                            'mark'=>0,
+                            'created_at'=>Carbon::now(),
+                        ]);
+
+                     }else{
+                        $student=Student::where('user_id',Auth::id())->first();
+                        IndividualTestDescriptiveAnswer::create([
+                            'student_id'=>$student->id,
+                            'quiz_id'=>$input['quiz_id'],
+                            'question_id'=>$ques->id,
+                            'answer'=>$input['answer__'.$ques->id],
+                            'mark'=>0,
+                            'created_at'=>Carbon::now(),
+                        ]);
+
+                     }
+                }
+
             }
         }
         if($request->quiz_type ==1){
@@ -261,15 +260,7 @@ class StudentQuizController extends Controller
                 'created_at'=>Carbon::now(),
             ]);
 
-            $quiz=IndependentTest::where('id',$input['quiz_id'])->first();
-            if($marks >= $quiz->pass_marks){
-                $comment=$quiz->passing_comments;
 
-            }else{
-
-                $comment=$quiz->failing_comments;
-
-            }
         }elseif($request->quiz_type ==2){
             $student=Student::where('user_id',Auth::id())->first();
             CourseBasedTestResult::create([
@@ -279,15 +270,7 @@ class StudentQuizController extends Controller
                 'created_at'=>Carbon::now(),
             ]);
 
-            $quiz=CourseBasedTest::where('id',$input['quiz_id'])->first();
-            if($marks >= $quiz->pass_marks){
-                $comment=$quiz->passing_comments;
 
-            }else{
-
-                $comment=$quiz->failing_comments;
-
-            }
         }else{
             $student=Student::where('user_id',Auth::id())->first();
             InvidualTestResult::create([
@@ -297,17 +280,9 @@ class StudentQuizController extends Controller
                 'created_at'=>Carbon::now(),
             ]);
 
-            $quiz=IndividualTest::where('id',$input['quiz_id'])->first();
-            if($marks >= $quiz->pass_marks){
-                $comment=$quiz->passing_comments;
 
-            }else{
-
-                $comment=$quiz->failing_comments;
-
-            }
         }
-        $data=[$marks,$comment];
+        $data=$marks;
         return redirect('/')->with('success',$data);
     }
 
@@ -322,6 +297,92 @@ class StudentQuizController extends Controller
             'assignments'=>$assignments,
             'student'=>$student,
         ]);
+    }
+
+    function generateMarksheet(){
+
+        $student=Student::where('user_id',Auth::user()->id)->first();
+        $quizzes=IndependentTest::all();
+        $quiz_results=IndependentTestResult::where('student_id',$student->id)->get();
+        $written_answer=IndependentDescriptiveAnswer::where('student_id',$student->id)->get();
+
+
+        $main_result=[];
+        foreach($quiz_results as $result){
+            $main_result[$result->quiz_id]=($result->total_marks);
+            foreach($written_answer as $answer){
+                if($result->quiz_id == $answer->quiz_id){
+                    $main_result[$result->quiz_id]+=($answer->mark);
+                }
+            }
+        }
+
+
+        $quizzes_results=[];
+        foreach($quizzes as $key=>$quiz){
+
+            $questions=IndependentTestQuestions::where('quiz_id',$quiz->id)->get();
+
+            $full_marks=0;
+            foreach($questions as $question){
+                $full_marks+=($question->rel_to_question->total_marks);
+
+            }
+            $marks=0;
+            if(array_key_exists($quiz->id,$main_result)){
+                $marks=$main_result[$quiz->id];
+
+                if($marks >= (0.8*$full_marks)){
+                    $gpa=4;
+                    $grade="A+";
+                }elseif (($marks>=0.75*$full_marks) && ($marks<(0.80*$full_marks))) {
+                    $gpa=((($marks-($full_marks*0.75))/5)*0.24)+3.75;
+                    $grade="A";
+                }elseif(($marks>=0.70*$full_marks) && ($marks<(0.75*$full_marks))){
+                    $gpa=((($marks-($full_marks*0.70))/5)*0.24)+3.50;
+                    $grade="A-";
+                }elseif(($marks>=0.65*$full_marks) && ($marks<(0.70*$full_marks))){
+                    $gpa=((($marks-($full_marks*0.65))/5)*0.24)+3.25;
+                    $grade="B+";
+                }elseif(($marks>=0.60*$full_marks) && ($marks<(0.65*$full_marks))){
+                    $gpa=((($marks-($full_marks*0.60))/5)*0.24)+3.00;
+                    $grade="B";
+                }elseif(($marks>=0.55*$full_marks) && ($marks<(0.60*$full_marks))){
+                    $gpa=((($marks-($full_marks*0.55))/5)*0.24)+2.75;
+                    $grade="B-";
+                }elseif(($marks>=0.50*$full_marks) && ($marks<(0.55*$full_marks))){
+                    $gpa=((($marks-($full_marks*0.50))/5)*0.24)+2.50;
+                    $grade="C+";
+                }elseif($marks<0.50*$full_marks){
+                    $gpa=0;
+                    $grade="F";
+                }else{
+                    $gpa=0;
+                    $grade="Absent";
+                }
+
+                $quizzes_results[]=array(
+                    'name'=>$quiz->name,
+                    'gpa'=>$gpa,
+                    'mark_obtained'=>$marks,
+                    'full_marks'=>$full_marks,
+                    'grade'=>$grade,
+                );
+
+            }
+
+        }
+
+       $data=[
+        'student'=>$student,
+            'quizzes_results'=>$quizzes_results,
+       ];
+
+        $pdf = PDF::loadView('marksheet_2', $data);
+
+        return $pdf->download($student->name."_".$student->registration_no.'_'.now().'.pdf');
+
+
     }
 
 }
