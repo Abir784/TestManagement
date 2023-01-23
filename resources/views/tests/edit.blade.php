@@ -54,10 +54,7 @@
                             </div>
                         </div>
 
-                        <div class="m-3 form-group">
-                            <label for="" class="form-label">Pass Marks:</label>
-                            <input type="number" required value="{{$quiz->pass_marks}}"name="pass_marks" class="form-control form-control-rounded">
-                        </div>
+                      
                         <div class="m-3 form-group">
                             <button type="submit" class="btn btn-success btn-rounded">Submit</button>
                         </div>

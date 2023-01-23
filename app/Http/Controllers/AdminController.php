@@ -13,7 +13,11 @@ use GrahamCampbell\ResultType\Success;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentSampleExport;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use Illuminate\Support\Facades\Auth;
 use PDF;
+
+
+
 
 class AdminController extends Controller
 {
@@ -102,6 +106,113 @@ class AdminController extends Controller
         return Excel::download(new StudentSampleExport, 'sample.xlsx');
     }
 
+
+    function admin_index(){
+        return view('auth.admin.add_admin');
+
+    }
+
+    function admin_post(Request $request){
+        $request->validate([
+            'name'=>'required',
+            'email'=>'required|unique:users,email',
+            'password'=>'required',
+            'role'=>'required',
+        ]);
+        User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'role'=>$request->role,
+            'password'=>bcrypt($request->password),
+        ]);
+        return back()->with('success','Successfull');
+
+    }
+    function show_admins(){
+        $admins=User::where('role','!=','2')->get();
+        return view('auth.admin.show_admininstrators',[
+            'admins'=>$admins,
+        ]);
+
+
+
+    }
+    function admin_delete($id){
+        User::find($id)->delete();
+
+        return back()->with('success','Deleted');
+    }
+
+    function admin_edit($id){
+
+        $admin=User::where('id',$id)->first();
+        return view('auth.admin.edit_admin',[
+            'admin'=>$admin,
+            'id'=>$id,
+        ]);
+    }
+    function admin_update(Request $request){
+        if($request->password == null){
+            User::find($request->id)->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'role'=>$request->role,
+                'updated_at'=>now(),
+            ]);
+
+        }else{
+            User::find($request->id)->update([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'role'=>$request->role,
+                'password'=>bcrypt($request->password),
+                'updated_at'=>now(),
+            ]);
+
+
+        }
+        return back()->with('success','Successfull');
+
+
+
+    }
+    function student_edit($user_id){
+
+        $student=Student::where('user_id',$user_id)->first();
+        return view('student.student_edit',[
+            'student'=>$student,
+        ]);
+
+    }
+    function student_update(Request $request){
+       if($request->password == null){
+           User::where('id',$request->user_id)->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+           ]);
+           Student::where('user_id',$request->user_id)->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'phone_no'=>$request->phone_no,
+            'registration_no'=>$request->registration_no,
+           ]);
+
+       }else{
+        User::where('id',$request->user_id)->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>bcrypt($request->password),
+           ]);
+           Student::where('user_id',$request->user_id)->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'phone_no'=>$request->phone_no,
+            'registration_no'=>$request->registration_no,
+           ]);
+       }
+
+       return back()->with('success','Successfull');
+    }
 
 
 

@@ -14,10 +14,15 @@ use App\Models\IndependentTestQuestions;
 use App\Models\IndependentTestResult;
 use App\Models\IndividualTest;
 use App\Models\IndividualTestDescriptiveAnswer;
+use App\Models\IndividualTestQuestion;
 use App\Models\InvidualTestResult;
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Intervention\Image\ImageManagerStatic as Image;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver;
 
 class StudentController extends Controller
 {
@@ -304,7 +309,6 @@ class StudentController extends Controller
     function IndividualQuizResultIndex(){
 
         $student=Student::where('user_id',Auth::user()->id)->first();
-        $quizzes=IndividualTest::all();
         $quiz_results=InvidualTestResult::where('student_id',$student->id)->get();
         $written_answer=IndividualTestDescriptiveAnswer::where('student_id',$student->id)->get();
 
@@ -321,19 +325,23 @@ class StudentController extends Controller
 
 
         $quizzes_results=[];
-        foreach($quizzes as $key=>$quiz){
+        foreach($quiz_results as $key=>$quiz){
 
-            $questions=IndependentTestQuestions::where('quiz_id',$quiz->id)->get();
+
+            $questions=IndividualTestQuestion::where('quiz_id',$quiz->quiz_id)->get();
+
 
             $full_marks=0;
             foreach($questions as $question){
+
                 $full_marks+=($question->rel_to_question->total_marks);
 
-            }
-            $marks=0;
-            if(array_key_exists($quiz->id,$main_result)){
-                $marks=$main_result[$quiz->id];
 
+            }
+
+            $marks=0;
+            if(array_key_exists($quiz->quiz_id,$main_result)){
+                $marks=$main_result[$quiz->quiz_id];
                 if($marks >= (0.8*$full_marks)){
                     $gpa=4;
                     $grade="A+";
@@ -364,7 +372,7 @@ class StudentController extends Controller
                 }
 
                 $quizzes_results[]=array(
-                    'name'=>$quiz->name,
+                    'name'=>$quiz->rel_to_quiz->name,
                     'gpa'=>$gpa,
                     'mark_obtained'=>$marks,
                     'full_marks'=>$full_marks,
@@ -374,22 +382,75 @@ class StudentController extends Controller
             }
 
         }
-
-
-
         return view('individual_test.result_sheet',[
             'student'=>$student,
             'quizzes_results'=>$quizzes_results,
         ]);
+
+    }
+    function certificate_index(){
+
+
+
+        $student=Student::where('user_id',Auth::id())->first();
+        $tests=CourseBasedTest::where('course_id',$student->course_id)->where('batch_id',$student->batch_id)->count();
+        $assignments=CoursedBasedAssignment::where('course_id',$student->course_id)->where('batch_id',$student->batch_id)->count();
+        $total_tests=$tests+$assignments;
+
+        $tests_attended=CourseBasedTestResult::where('student_id',$student->id)->count();
+        $assignment_attended=CourseBasedAssignmentSubmission::where('student_id',$student->id)->count();
+        // $assignment_attended=0;
+        $total_attended=$tests_attended+$assignment_attended;
+
+        if($total_tests ==  $total_attended){
+
+            $image = Image::make(public_path('example.jpg'));
+            $image->text($student->name,750, 1000, function($font) {
+            $font->file(public_path('font/Lusitana-Regular.ttf'));
+            $font->size(90);
+            $font->color('#121010');
+            $font->align('center');
+            $font->valign('top');
+            $font->angle(0);
+        });
+        $image->save(public_path("certificates/".$student->id.'.jpg'));
+        // return $image->response('jpg');
+    }
+    $image_name= $student->id.'.'.'jpg';
+    $bool= $total_attended == $total_tests;
+        return view('student.certificate_index',[
+            'bool'=>$bool,
+            'image_name'=>$image_name,
+        ]);
     }
 
+    function edit($id){
+        $admin=User::where('id',$id)->first();
+        return view('password_edit',[
+            'admin'=>$admin,
+        ]);
+    }
+    function update(Request $request){
+        $request->validate([
+            'password'=>'confirmed',
+             'old_password'=>'required',
 
+        ]);
 
+        $user=User::where('id',$request->id)->first();
+        if(Hash::check($request->old_password,$user->password)){
+            $user->update([
+                'password'=>bcrypt($request->password),
+            ]);
+            return back()->with('success','Password Changed Succesfully');
 
+        }else{
+            return back()->with('success','Old Password doesn"t match');
+        }
 
-
+    }
 }
 
 
 
-//
+

@@ -1,23 +1,14 @@
 <?php
 namespace App\Exports;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-use Maatwebsite\Excel\Concerns\WithProperties;
-
-class StudentSampleExport implements WithProperties
+class StudentSampleExport implements FromView
 {
-    public function properties(): array
+    public function view(): View
     {
-        return [
-            'creator'        => 'Patrick Brouwers',
-            'lastModifiedBy' => 'Patrick Brouwers',
-            'title'          => 'Invoices Export',
-            'description'    => 'Latest Invoices',
-            'subject'        => 'Invoices',
-            'keywords'       => 'invoices,export,spreadsheet',
-            'category'       => 'Invoices',
-            'manager'        => 'Patrick Brouwers',
-            'company'        => 'Maatwebsite',
-        ];
+
+        return view('sample');
 
     }
 }

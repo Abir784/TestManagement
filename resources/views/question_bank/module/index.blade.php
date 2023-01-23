@@ -25,7 +25,7 @@
                             <td>{{$module->desp !=null ? $module->desp : 'N/A'}}</td>
                             <td>{{($module->created_at)->format('d/m/Y')}}</td>
                             <td ><a href="{{route('module.delete', $module->id)}}" class="m-2 btn btn-outline-danger btn-rounded show_confirm"> Delete</a>
-                                <a href="{{route('question.index', $module->id)}}" class="m-2 btn btn-outline-primary btn-rounded show_confirm">Questions</a>
+                                <a href="{{route('question.index', $module->id)}}" class="m-2 btn btn-outline-primary btn-rounded show_confirm">Add Questions</a>
                                 <a href="{{route('question.show',$module->id)}}" class="m-2 btn btn-outline-warning btn-rounded show_confirm">Show Questions</a>
                             </td>
                         </tr>

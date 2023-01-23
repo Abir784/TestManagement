@@ -33,7 +33,6 @@
                             <td>{{$key+1 }}</td>
                             <td>{{ $test->name}}</td>
                             <td>{{ $full_marks}}</td>
-                            <td>{{ $test->pass_marks}}</td>
                             <td>
                                 @if (($test->start_date > Carbon\Carbon::now()->format('Y-m-d') && $test->start_time >=  Carbon\Carbon::now()->format('H:i:s')) || $test->start_date > Carbon\Carbon::now()->format('Y-m-d'))
                                   {{'Starts at '.Carbon\Carbon::parse($test->start_date)->format('d-M-Y').','.Carbon\Carbon::parse($test->start_time)->format('h:i A')}}
@@ -118,10 +117,7 @@
                                 </div>
                             </div>
 
-                            <div class="m-3 form-group">
-                                <label for="" class="form-label">Pass Marks:</label>
-                                <input type="number" required name="pass_marks" class="form-control form-control-rounded">
-                            </div>
+                           
                             <div class="m-3 form-group">
                                 <button type="submit" class="btn btn-success btn-rounded">Submit</button>
                             </div>

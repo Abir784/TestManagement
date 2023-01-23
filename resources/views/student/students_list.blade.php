@@ -34,8 +34,8 @@
                             <td>{{$student->batch_name->batch_name}}</td>
                             <td>{{($student->created_at)->format('d M,Y')}}</td>
                             <td>
-                                <a href="{{route('student.delete', $student->user_id)}}" class="mr-2 btn btn-outline-danger btn-rounded show_confirm"> Delete</a>
-                                {{-- <a href="#" class="mr-2 btn btn-outline-info btn-rounded show_confirm"> Edit</a> --}}
+                                <a href="{{route('student.delete', $student->user_id)}}" class="mb-2 btn btn-outline-danger btn-rounded show_confirm"> Delete</a>
+                                <a href="{{route('student.edit', $student->user_id)}}" class="mb-2 btn btn-outline-info btn-rounded show_confirm"> Edit</a>
                             </td>
 
                         </tr>

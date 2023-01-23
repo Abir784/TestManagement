@@ -15,17 +15,18 @@
                           </div>
 
                         @endif
-                        @if (session('timeout'))
-                        <div class="alert alert-danger">
-                           {!! session('timeout') !!}
-                        </div>
-                      @endif
+
                     </div>
                 <div class="card-title">{{ __('Dashboard') }}</div>
                 {{"----Your Info----"}}<br>
                 {{"Name: ". Auth::user()->name}} <br>
                 {{"Email: ". Auth::user()->email}} <br>
+                @if(Auth::user()->role == 2)
                 {{"Role: ". 'Student'}}
+                @elseif (Auth::user()->role == 3)
+                {{"Role: ". 'Instructor'}}
+
+                @endif
                 </div>
                 </div>
             </div>

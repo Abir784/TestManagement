@@ -20,6 +20,18 @@ use PDF;
 
 class StudentCourseBasedTestController extends Controller
 {
+    public function Ajax(Request $request){
+
+        $send_to_cat='<option value="">---Select Quiz name---</option>';
+        $quizzes = CourseBasedTest::where('course_id',$request->batch_id)->get();
+        foreach($quizzes as $quiz){
+            $send_to_cat.='<option value="'.$quiz->id.' ">'.$quiz->name .'</option>';
+        }
+        echo $send_to_cat;
+
+
+    }
+
     function index(){
 
         $course=Course::all();
@@ -159,18 +171,16 @@ class StudentCourseBasedTestController extends Controller
     }
     function update(Request $request){
 
+        $scheduled_date=CourseBasedTest::where('id',$request->id)->first()->start_date;
         CourseBasedTest::find($request->id)->update([
-            'name'=>$request->name,
-            'introduction_text'=>$request->introduction_text,
-            'passing_comments'=>$request->pass_comment,
-            'failing_comments'=>$request->failing_comment,
-            'time'=>$request->time,
+            'postponed_reason'=>$request->reason,
+            'postponed_date'=>$scheduled_date,
             'start_date'=>$request->start_date,
             'start_time'=>$request->start_time,
             'end_date'=>$request->end_date,
             'end_time'=>$request->end_time,
-            'pass_marks'=>$request->pass_marks,
-            'created_at'=>Carbon::now(),
+
+            'updated_at'=>Carbon::now(),
         ]);
 
         return redirect(url('admin/index/course_based_test'))->with('update','Successfull');

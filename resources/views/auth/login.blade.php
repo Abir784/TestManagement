@@ -172,12 +172,12 @@
                     </div>
                 </div>
                 <div class="form-group text-center mb-0">
-                    @if (Route::has('password.request'))
+                    {{-- @if (Route::has('password.request'))
                     <a class="btn btn-link" href="{{ route('password.request') }}">
                         {{ __('Forgot Your Password?') }}
-                     </a>
-                 @endif
-                  <br>  Don't have an account? <a class="text-underline" href="signup.html">Sign up</a>
+                     </a> --}}
+                 {{-- @endif --}}
+                  {{-- <br>  Don't have an account? <a class="text-underline" href="signup.html">Sign up</a> --}}
                 </div>
             </form>
         </div>

@@ -6,11 +6,11 @@
     <div class="row">
         <div class="col-lg-10">
             <div class="card">
-                <div class="card-header bg-default">
-                    <h3>{{'Update Courses'}}
-                    </h3>
-                </div>
+
                 <div class="card-body">
+                    <div class="card-title">
+                        Course Update
+                    </div>
                     <form action="{{route('course.update')}}" method="POST">
                         @csrf
                         <input type="hidden" name="id" value="{{$id}}">

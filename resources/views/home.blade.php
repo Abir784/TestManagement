@@ -8,35 +8,19 @@
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    <table class="table table-">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Role</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($user as $key=>$user)
-                            <tr>
-                                <th scope="row">{{$key+1}}</th>
-                                <td>{{$user->name}}</td>
-                                <td>{{$user->email}}</td>
-                                @if ($user->role==1)
-                                <td>{{"Admin"}}</td>
+                {{"----Your Info----"}}<br>
+                {{"Name: ". Auth::user()->name}} <br>
+                {{"Email: ". Auth::user()->email}} <br>
+                @if (Auth::user()->role ==0)
+                {{"Role: ". 'Super Admin'}}
+                @elseif (Auth::user()->role ==1)
+                {{"Role: ". 'Admin'}}
+                @else
+                {{"Role: ". 'Instructor'}}
 
-                                @else
-                                <td>{{"Student"}}</td>
-                                @endif
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+
+                @endif
                 </div>
-
-
-
                 </div>
             </div>
         </div>

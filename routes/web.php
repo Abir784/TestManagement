@@ -9,6 +9,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentCourseBasedTestController;
 use App\Http\Controllers\StudentQuizController;
+use App\Http\Controllers\TabulationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\AdminMiddleware;
@@ -32,13 +33,25 @@ use App\Models\Student;
 Route::post('/getBatch',[CourseController::class, 'Ajax']);
 Route::post('/getBatch2',[CourseController::class, 'Ajax']);
 Route::post('/getModule',[QuizController::class,'Ajax']);
+Route::post('/getQuiz',[StudentCourseBasedTestController::class,'Ajax']);
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Auth::routes();
 
+Route::get('/edit/{id}',[StudentController::class,'edit'])->name('student_edit_individual.index');
+Route::post('/update/post',[StudentController::class,'update'])->name('student_edit_individual.update');
 //Admin Routes
 Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],function(){
+    //Admin or instructor part
+    Route::get('/add_administrators/index',[AdminController::class,'admin_index'])->name('add_admin.index');
+    Route::post('/add_admin/post',[AdminController::class,'admin_post'])->name('add_admin.post');
+    Route::get('/show_administrators',[AdminController::class,'show_admins'])->name('show.admins');
+    Route::get('/show_administrators/delete/{id}',[AdminController::class,'admin_delete'])->name('admin.delete');
+    Route::get('/show_administrators/edit/{id}',[AdminController::class,'admin_edit'])->name('admin.edit');
+    Route::post('/show_administrators/update',[AdminController::class,'admin_update'])->name('admin.update');
     //Student Part
   Route::get('/addstudent',[AdminController::class,'student_index'])->name('add_student.index');
+  Route::get('/student/edit/{id}',[AdminController::class,'student_edit'])->name('student.edit');
+  Route::post('/student/update',[AdminController::class,'student_update'])->name('student.update');
   Route::post('/addstudentPost',[AdminController::class,'student_post'])->name('add_student.post');
   Route::get('/student/show',[AdminController::class,'student_show'])->name('add_student.show');
   Route::get('/student/delete/{id}',[AdminController::class,'student_delete'])->name('student.delete');
@@ -128,11 +141,48 @@ Route::group(['middleware'=>['auth','AdminMiddleware'],'prefix'=>'admin',],funct
   Route::get('/Assignment/Index',[AssignmentController::class,'Index']);
   Route::get('Assignment/Marking/{id}',[AssignmentController::class,'Marking'])->name('assignment.marking');
   Route::post('Assignment/Marking/post',[AssignmentController::class,'MarkingPost'])->name('assignment.marking.post');
+  //course wise tabulation sheet {marks};
+  Route::get('course_wise_tabulation_marks/index',[TabulationController::class,'course_wise_tabulation_marks_index']);
+  Route::post('course_wise_tabulation_marks/post',[TabulationController::class,'course_wise_tabulation_marks_post']);
+  Route::get('course_wise_tabulation_marks/download/{course_id}/{batch_id}',[TabulationController::class,'course_wise_tabulation_marks_pdf'])->name('course_wise_tabulation_marks_pdf');
+  //course wise tabulation sheet {grades};
+  Route::get('course_wise_tabulation_grades/index',[TabulationController::class,'course_wise_tabulation_grades_index']);
+  Route::post('course_wise_tabulation_grades/post',[TabulationController::class,'course_wise_tabulation_grades_post']);
+  Route::get('course_wise_tabulation_grade/download/{course_id}/{batch_id}',[TabulationController::class,'course_wise_tabulation_grades_pdf'])->name('course_wise_tabulation_grades_pdf');
+//Course Wise Result Sheet
+Route::get('course_wise_result_sheet/index',[TabulationController::class,'course_wise_result_sheet_index']);
+Route::post('course_wise_result_sheet/post',[TabulationController::class,'course_wise_result_sheet_post']);
+Route::get('course_wise_result_sheet/download/{course_id}/{batch_id}',[TabulationController::class,'course_wise_result_sheet_pdf'])->name('course_wise_result_sheet_pdf');
+//Course wise Exam Attendance
+Route::get('course_wise_exam_attendace_sheet/index',[TabulationController::class,'course_wise_exam_attendace_sheet_index']);
+Route::post('course_wise_exam_attendace_sheet/post',[TabulationController::class,'course_wise_exam_attendace_sheet_post']);
+Route::get('course_wise_exam_attendace_sheet/download/{course_id}/{batch_id}/{quiz_id}',[TabulationController::class,'course_wise_exam_attendace_sheet_pdf'])->name('course_wise_exam_attendace_sheet_pdf');
+//Individual Attandance Sheet
+Route::get('individual_attendance_sheet/index',[TabulationController::class,'individual_attendance_sheet_index']);
+Route::post('individual_attendance_sheet/post',[TabulationController::class,'individual_attendance_sheet_post']);
+Route::get('individual_attendance_sheet/download/{id}',[TabulationController::class,'individual_attendance_sheet_pdf'])->name('individual_attendance_sheet_pdf');
+// Course wise all exam attendance sheet
+Route::get('course_wise_attendance_sheet/index',[TabulationController::class,'course_wise_attendance_sheet_index']);
+Route::post('course_wise_attendance_sheet/post',[TabulationController::class,'course_wise_attendance_sheet_post']);
+Route::get('course_wise_attendance_sheet/download/{batch_id}/{quiz_id}',[TabulationController::class,'course_wise_attendance_sheet_pdf'])->name('course_wise_attendance_sheet_pdf');
+//Course Wise Absent List
+Route::get('course_wise_absent_sheet/index',[TabulationController::class,'course_wise_absent_sheet_index']);
+Route::post('course_wise_absent_sheet/post',[TabulationController::class,'course_wise_absent_sheet_post']);
+Route::get('course_wise_absent_sheet/download/{batch_id}/{quiz_id}',[TabulationController::class,'course_wise_absent_sheet_pdf'])->name('course_wise_absent_sheet_pdf');
 
+//Course Wise Exam Schedule
+Route::get('course_wise_exam_schedule/index',[TabulationController::class,'course_wise_exam_schedule_index']);
+Route::post('course_wise_exam_schedule/post',[TabulationController::class,'course_wise_exam_schedule_post']);
+Route::get('course_wise_exam_schedule/download/{batch_id}/{quiz_id}',[TabulationController::class,'course_wise_exam_schedule_pdf'])->name('course_wise_exam_schedule_pdf');
 
-
-
-
+// course exam schedule Date range
+Route::get('course_wise_exam_date_range_schedule/index',[TabulationController::class,'course_wise_exam_date_range_schedule_index']);
+Route::post('course_wise_exam_date_range_schedule/post',[TabulationController::class,'course_wise_exam_date_range_schedule_post']);
+Route::get('course_wise_exam_date_range_schedule/download/{from_date}/{to_date}',[TabulationController::class,'course_wise_exam_date_range_schedule_pdf'])->name('course_wise_exam_schedule_pdf');
+//Course postponed exam list
+Route::get('course_wise_exam_postponed_list/index',[TabulationController::class,'course_wise_exam_postponed_list_index']);
+Route::post('course_wise_exam_postponed_list/post',[TabulationController::class,'course_wise_exam_postponed_list_post']);
+Route::get('course_wise_exam_postponed_list/download/{from_date}/{to_date}',[TabulationController::class,'course_wise_exam_postponed_list_pdf'])->name('course_wise_exam_schedule_pdf');
 
 
 
@@ -159,6 +209,11 @@ Route::group(['middleware'=>['auth'],'prefix'=>'student',],function(){
     Route::get('individual_quiz_result/index',[StudentController::class,'IndividualQuizResultIndex'])->name('individual_quiz_result.result');
     Route::get('generate/marksheet', [StudentCourseBasedTestController::class, 'generateMarksheet']);
     Route::get('generate/marksheet_2', [StudentQuizController::class, 'generateMarksheet']);
+    Route::get('generate/marksheet_3', [IndividualTestController::class, 'Marksheetgenerate']);
+   //Download Certificate
+   Route::get('/download/certificate/index',[StudentController::class,'certificate_index'])->name('certificate.index');
+// Student Edit
+
 
 
 });

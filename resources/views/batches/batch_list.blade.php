@@ -5,8 +5,11 @@
     <div class="row">
         <div class="col-lg-10">
             <div class="card">
-                <div class="card-header"><h3>Course List</h3></div>
+
                 <div class="card-body">
+                    <div class="card-title">
+                        <h3>Batch List</h3>
+                    </div>
 
                     <table class="table table-striped">
                         <tr>

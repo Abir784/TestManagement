@@ -5,6 +5,9 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="mb-3">
+                        <a href="{{url('student/generate/marksheet_3')}}">Download Masrksheet</a>
+                    </div>
                     <h5 class="card-title">
 <pre>
 Name:              {{$student->name}}
